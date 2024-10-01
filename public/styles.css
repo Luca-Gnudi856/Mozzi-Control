@@ -1,0 +1,432 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Light background */
+    color: #333; /* Dark text color */
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styles */
+/* .navbar {
+    background-color: #333;
+    overflow: hidden;
+    z-index: 1;
+    font-family: Arial, Helvetica, sans-serif;
+} */
+
+/* Navbar logo */
+.navbar-logo {
+    height: 30px;  /* Adjust the size as needed */
+    width: 30px;
+    margin-right: 10px; /* Add spacing between logo and next element */
+    vertical-align: middle; /* Aligns the logo with text */
+}
+
+.navbar {
+    background-color: #333;
+    position: fixed;   /* Fixes the navbar at the top of the page */
+    width: 100%;
+    top: 0;
+    z-index: 1;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 50px;
+    display: flex;      /* Use flex for easier layout */
+}
+
+.navbar a, .dropbtn {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navbar a:hover {
+    background-color: #575757;
+    color: white;
+}
+
+
+/* Dropdown container */
+.dropdown {
+    float: left;
+    overflow: visible;
+    position: relative;
+}
+
+/* Dropdown button */
+.dropbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 999;           
+    top: 50px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #444;
+}
+
+
+
+h1, h2 {
+    color: #007BFF; /* Blue color for headings */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Dropdown container */
+/* .dropdown {
+    position: relative;
+    display: inline-block;
+} */
+
+/* Dropdown button
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+} */
+
+/* Dropdown content (hidden by default) */
+/* .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+} */
+
+/* Links inside the dropdown */
+/* .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+} */
+
+/* Change color of dropdown links on hover */
+/* .dropdown-content a:hover {
+    background-color: #f1f1f1;
+} */
+
+/* Show the dropdown menu on hover */
+/* .dropdown:hover .dropdown-content {
+    display: block;
+} */
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+/* .dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+} */
+
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* .navbar {
+    background-color: #333;
+    overflow: hidden; 
+    font-family: Arial, Helvetica, sans-serif;
+} */
+
+/* .navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+} */
+
+button {
+    background-color: #007BFF; /* Blue background */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+button:active {
+    background-color: #003d7a; /* Even darker blue when pressed */
+    transform: scale(0.98); /* Optional: makes the button shrink slightly when pressed */
+}
+
+input[type="text"], input[type="password"], input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="checkbox"] {
+    margin-left: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+canvas {
+    margin-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+#status {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-left: 4px solid #007BFF;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#status.error {
+    border-left-color: #e74c3c;
+    color: #e74c3c;
+}
+
+#status.success {
+    border-left-color: #2ecc71;
+    color: #2ecc71;
+}
+
+#statusSavedConnect {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-left: 4px solid #007BFF;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#statusSavedConnect.error {
+    border-left-color: #e74c3c;
+    color: #e74c3c;
+}
+
+#statusSavedConnect.success {
+    border-left-color: #2ecc71;
+    color: #2ecc71;
+}
+
+/* 
+      .chartMenu {
+        width: 100vw;
+        height: 40px;
+        background: #1A1A1A;
+        color: rgba(54, 162, 235, 1);
+      }
+      .chartMenu p {
+        padding: 10px;
+        font-size: 20px;
+      }
+      .chartCard {
+        width: 100vw;
+        height: calc(100vh - 40px);
+        background: rgba(54, 162, 235, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chartBox {
+        width: 700px;
+        padding: 20px;
+        border-radius: 20px;
+        border: solid 3px rgba(54, 162, 235, 1);
+        background: white;
+      }
+      .darkMode{
+        color: white;
+      } */
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #222222; /* Dark background */
+        color: #f4f4f4; /* Light text color */
+    }
+
+    h1, h2 {
+        color: #1E90FF; /* Lighter blue for headings */
+    }
+
+    /* Dropdown in dark mode */
+    /* .dark-mode .dropbtn {
+        background-color: #333;
+        color: #fff;
+    } */
+
+    /* .dropdown-content {
+        background-color: #222;
+    } */
+
+    /* .dark-mode .dropdown-content {
+        background-color: #333;
+    } */
+
+    .dropdown-content a {
+        color: white;
+    }
+
+    /* .dark-mode .dropdown-content a {
+        color: white;
+    } */
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* .dark-mode .dropdown-content a:hover {
+        background-color: #555;
+    } */
+
+
+    .container {
+        background-color: #1c1c1c; /* Darker container background */
+        color: #f4f4f4; /* Light text inside container */
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Subtle shadow */
+    }
+    
+    .navbar {
+        background-color: #333; /* Keep dark navbar */
+    }
+
+    .navbar a {
+        color: #f4f4f4;
+    }
+
+    .navbar a:hover {
+        background-color: #444;
+        color: white;
+    }
+
+    button {
+        background-color: #1E90FF;
+    }
+
+    button:hover {
+        background-color: #104E8B;
+    }
+
+    input[type="text"], input[type="password"], input[type="number"], select {
+        background-color: #333;
+        color: #f4f4f4;
+        border: 1px solid #555;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    table, th, td {
+        border: 1px solid #555555;
+        color: #f4f4f4;
+    }
+
+    #status {
+        background-color: #222;
+        color: #f4f4f4;
+    }
+
+    #status.error {
+        border-left-color: #e74c3c;
+    }
+
+    #status.success {
+        border-left-color: #2ecc71;
+    }
+
+    #statusSavedConnect {
+        padding: 10px;
+        background-color: #222;
+        border-left: 4px solid #007BFF;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    
+    #statusSavedConnect.error {
+        border-left-color: #e74c3c;
+        color: #e74c3c;
+    }
+    
+    #statusSavedConnect.success {
+        border-left-color: #2ecc71;
+        color: #2ecc71;
+    }
+}

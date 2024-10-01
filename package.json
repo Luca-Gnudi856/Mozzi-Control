@@ -1,0 +1,25 @@
+{
+  "name": "host_own_website",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Luca Gnudi",
+  "license": "ISC",
+  "description": "Mosquito control website",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Luca-Gnudi856/Mozzi-Control.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Luca-Gnudi856/Mozzi-Control/issues"
+  },
+  "homepage": "https://github.com/Luca-Gnudi856/Mozzi-Control#readme",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "express": "^4.21.0",
+    "moment": "^2.30.1"
+  }
+}
