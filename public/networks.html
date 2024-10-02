@@ -150,9 +150,9 @@
         document.getElementById('connectSavedButton').addEventListener('click', async () => {
             const ssid = document.getElementById('savedNetworkSelect').value;
             const Status = document.getElementById('statusSavedConnect');
-            const retryCount = 5;  // Number of polling attempts
-            const retryDelay = 2000;  // Delay between retries (milliseconds)
-            const pollDelay = 3000;  // Delay before starting polling (milliseconds)
+            const retryCount = 40;  // Number of polling attempts
+            const retryDelay = 1000;  // Delay between retries (milliseconds)
+            const pollDelay = 1000;  // Delay before starting polling (milliseconds)
 
             if (!ssid) {
                 Status.textContent = 'Please select a network to connect to.';
@@ -226,17 +226,131 @@
             }
         });
 
-        async function connect(retryCount = 50, retryDelay = 3000) {
+        // async function connect(retryCount = 50, retryDelay = 3000) {
+        //     const ssid = document.getElementById('networkSelect').value;
+        //     const username = document.getElementById('username').value;
+        //     const password = document.getElementById('password').value;
+        //     const priority = document.getElementById('priority').value;
+
+        //     const status = document.getElementById('status');
+        //     status.textContent = `Connecting to ${ssid}...`;
+
+        //     try {
+        //         // Send the connect request
+        //         const response = await fetch('/connect', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/x-www-form-urlencoded',
+        //             },
+        //             body: new URLSearchParams({
+        //                 ssid: ssid,
+        //                 username: username,
+        //                 password: password,
+        //                 priority: priority,
+        //             }),
+        //         });
+
+        //         // Check if the initial connection request succeeded
+        //         if (!response.ok) {
+        //             const errorText = await response.text();
+        //             status.textContent = `Failed to start connection: ${errorText}`;
+        //             return;
+        //         }
+
+        //         // Wait for a few seconds before starting polling (to allow time for connection process to begin)
+        //         await new Promise(resolve => setTimeout(resolve, pollDelay));
+
+        //         // Poll the connection status
+        //         for (let attempt = 0; attempt < retryCount; attempt++) {
+        //             try {
+        //                 // Fetch the connection status from the backend
+        //                 const statusResponse = await fetch('/status');
+
+        //                 if (!statusResponse.ok) {
+        //                     const errorText = await statusResponse.text();
+        //                     status.textContent = `Error fetching connection status: ${errorText}`;
+        //                     return;
+        //                 }
+
+        //                 const statusData = await statusResponse.json();
+
+        //                 if (statusData.status === 'connected') {
+        //                     status.textContent = `Successfully connected to ${ssid}`;
+        //                     return;
+        //                 } else if (statusData.status === 'failed') {
+        //                     status.textContent = `Failed to connect: ${statusData.error}`;
+        //                     return;
+        //                 }
+
+        //                 // Update status for in-progress attempt
+        //                 status.textContent = `Attempt ${attempt + 1}: Still trying to connect...`;
+        //             } catch (error) {
+        //                 // Handle network errors gracefully during polling
+        //                 console.warn('Error fetching connection status, retrying...', error);
+        //                 status.textContent = `Attempt ${attempt + 1}: Waiting for connection...`;
+        //             }
+
+        //             // Wait before the next polling attempt
+        //             await new Promise(resolve => setTimeout(resolve, retryDelay));
+        //         }
+
+        //         // If max attempts reached and no success
+        //         status.textContent = 'Failed to connect: Max attempts reached.';
+        //     } catch (error) {
+        //         // Handle any errors in the connection attempt
+        //         console.error('Error connecting to saved network:', error);
+        //         status.textContent = `Network error: ${error.message}`;
+        //     }
+
+        //     //     const statusResponse = await fetch('/status');
+
+        //     //     if (!response.ok) {
+        //     //         const errorText = await response.text();
+        //     //         status.textContent = `Failed to start connection: ${errorText}`;
+        //     //         return;
+        //     //     }
+
+        //     //     // Poll the connection status
+        //     //     for (let attempt = 0; attempt < retryCount; attempt++) {
+        //     //         //const statusResponse = await fetch('/status');
+        //     //         const statusData = await statusResponse.json();
+
+        //     //         if (statusData.status === 'connected') {
+        //     //             status.textContent = `Successfully connected to ${ssid}`;
+        //     //             return;
+        //     //         } else if (statusData.status === 'failed') {
+        //     //             status.textContent = `Failed to connect: ${statusData.error}`;
+        //     //             return;
+        //     //         }
+
+        //     //         status.textContent = `Attempt ${attempt + 1}: Still trying to connect...`;
+        //     //         await new Promise(resolve => setTimeout(resolve, retryDelay));
+        //     //     }
+
+        //     //     status.textContent = 'Failed to connect: Max attempts reached.';
+        //     // } catch (error) {
+        //     //     status.textContent = `Network error: ${error.message}`;
+        //     //     console.error('Error:', error);
+        //     // }
+        // }
+
+        async function connect(retryCount = 40, retryDelay = 2000) {
             const ssid = document.getElementById('networkSelect').value;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const priority = document.getElementById('priority').value;
-
             const status = document.getElementById('status');
+            const pollDelay = 3000;  // Delay before polling begins
+
+            if (!ssid || !password) {
+                status.textContent = 'Please enter both SSID and password.';
+                return;
+            }
+
             status.textContent = `Connecting to ${ssid}...`;
 
             try {
-                // Send the connect request
+                // Start the connection attempt by sending the POST request
                 const response = await fetch('/connect', {
                     method: 'POST',
                     headers: {
@@ -244,13 +358,12 @@
                     },
                     body: new URLSearchParams({
                         ssid: ssid,
-                        username: username,
+                        username: username,  // Add only if needed
                         password: password,
                         priority: priority,
                     }),
                 });
 
-                // Check if the initial connection request succeeded
                 if (!response.ok) {
                     const errorText = await response.text();
                     status.textContent = `Failed to start connection: ${errorText}`;
@@ -298,42 +411,10 @@
                 status.textContent = 'Failed to connect: Max attempts reached.';
             } catch (error) {
                 // Handle any errors in the connection attempt
-                console.error('Error connecting to saved network:', error);
+                console.error('Error connecting to network:', error);
                 status.textContent = `Network error: ${error.message}`;
             }
-
-            //     const statusResponse = await fetch('/status');
-
-            //     if (!response.ok) {
-            //         const errorText = await response.text();
-            //         status.textContent = `Failed to start connection: ${errorText}`;
-            //         return;
-            //     }
-
-            //     // Poll the connection status
-            //     for (let attempt = 0; attempt < retryCount; attempt++) {
-            //         //const statusResponse = await fetch('/status');
-            //         const statusData = await statusResponse.json();
-
-            //         if (statusData.status === 'connected') {
-            //             status.textContent = `Successfully connected to ${ssid}`;
-            //             return;
-            //         } else if (statusData.status === 'failed') {
-            //             status.textContent = `Failed to connect: ${statusData.error}`;
-            //             return;
-            //         }
-
-            //         status.textContent = `Attempt ${attempt + 1}: Still trying to connect...`;
-            //         await new Promise(resolve => setTimeout(resolve, retryDelay));
-            //     }
-
-            //     status.textContent = 'Failed to connect: Max attempts reached.';
-            // } catch (error) {
-            //     status.textContent = `Network error: ${error.message}`;
-            //     console.error('Error:', error);
-            // }
         }
-
 
 
 

@@ -66,8 +66,8 @@ async function writeToFileExclusive(filePath, data) {
 
 
 app.post('/setParameters', async (req, res) => {
-    const { temperature, humidity, maxLighting, dayLength, samplingDuration, lightingMode } = req.body;
-    let temp, humid, maxLight, dayLen, lightMod, sampDur;
+    const { temperature, humidity, maxLighting, dayLength, samplingDuration, lightingMode, minuteCount, timeOn, timeOff } = req.body;
+    let temp, humid, maxLight, dayLen, lightMod, sampDur, minCont, t_on,t_off;
     
     const currentSettings = await readCurrentSettings('setting.txt');
 
@@ -108,7 +108,26 @@ app.post('/setParameters', async (req, res) => {
         lightMod = currentSettings.lightingMode;
     }
 
-    const settings = `temperature=${temp}\nhumidity=${humid}\nmaxLighting=${maxLight}\ndayLength=${dayLen}\nsamplingDuration=${sampDur}\nligthingMode=${lightMod}`;;
+    if(minuteCount){
+        minCont = minuteCount;
+    } else {
+        minCont = currentSettings.minuteCount;
+    }
+
+    if(timeOn){
+        t_on = timeOn;
+    } else {
+        t_on = currentSettings.timeOn;
+    }
+
+    if(timeOn){
+        t_off = timeOff;
+    } else {
+        t_off = currentSettings.timeOff;
+    }
+
+
+    const settings = `temperature=${temp}\nhumidity=${humid}\nmaxLighting=${maxLight}\ndayLength=${dayLen}\nsamplingDuration=${sampDur}\nlightingMode=${lightMod}\nminuteCount=${minCont}\ntimeOn=${t_on}\ntimeOff=${t_off}`;
 
     try {
         await writeToFileExclusive('setting.txt', settings);
@@ -908,8 +927,8 @@ app.get('/savedAvailableNetworks', (req, res) => {
 
 // UUID generator function
 let connectionInProgress = null;
-let connectionStatus;
-let lastConnectionError;
+let connectionStatus = 'idle';
+let lastConnectionError = '';
 
 
 app.post('/connect', (req, res) => {
@@ -1103,6 +1122,7 @@ app.post('/connectSaved', (req, res) => {
         if (stdout.includes('successfully activated')) {
             connectionStatus = 'connected';
             console.log(`Successfully connected to ${ssid}`);
+            lastConnectionError = '';
             handleGatewayUpdate();  // Call your existing gateway update logic
             return res.send(`Successfully connected to ${ssid}`);
         } else {
@@ -1117,13 +1137,16 @@ app.post('/connectSaved', (req, res) => {
 
 // Add a new status endpoint to check connection progress
 app.get('/status', (req, res) => {
+    console.log("status hit");
     if (connectionInProgress) {
         return res.status(200).send({ status: 'in_progress' });
     }
 
     if (connectionStatus === 'connected') {
+        console.log("status connected");
         return res.status(200).send({ status: 'connected' });
     } else if (connectionStatus === 'failed') {
+        console.log("status lastconnection error:",lastConnectionError);
         return res.status(500).send({ status: 'failed', error: lastConnectionError });
     } else {
         return res.status(200).send({ status: 'idle' });

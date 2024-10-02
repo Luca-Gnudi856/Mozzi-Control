@@ -14,9 +14,9 @@ else:
 md = ModbusClass()
 md.Connect()
 
-csv_file = 'data.csv'
-settings_file = 'setting.txt'
-custom_file = 'Custom.csv'
+csv_file = 'host_own_website/data.csv'
+settings_file = 'host_own_website/setting.txt'
+custom_file = 'host_own_website/Custom.csv'
 
 def writeDuration(value):
     md.WriteSingleDigital(8256, 1)
@@ -72,35 +72,48 @@ def unlock_file(file):
         fcntl.flock(file, fcntl.LOCK_UN)
 
 def read_settings():
-    with open(settings_file, 'r') as file:
-        lines = file.readlines()
+    max_retries = 50  # Maximum number of retries if the file is locked
+    retry_delay = 2  # Delay between retries (in seconds)
 
-    mode1, temp1, humid1, light1, dayLight1, sample1, count1, timeOn, timeOff = [line.strip().split(',')[0] for line in lines[:9]]
+    retries = 0
+    while retries < max_retries:
+        try:
+            # Attempt to open the settings file
+            with open(settings_file, 'r') as file:
+                lines = file.readlines()
 
-    temp1 = int(temp1.split("=")[1])
-    humid1 = int(humid1.split("=")[1])
-    light1 = int(light1.split("=")[1])
-    dayLight1 = int(dayLight1.split("=")[1])
-    sample1 = int(sample1.split("=")[1])
-    count1 = int(count1.split("=")[1])
-    timeOn = timeOn.split("=")[1]
-    timeOff = timeOff.split("=")[1]
-    
-    hour, minute = map(int, timeOn.split(":"))  # Split time into hour and minute as integers
-    hour = "0x"+str(hour)
-    minute = "0x"+str(minute)
-    hour = int(hour, 16)
-    minute = int(minute, 16)
-    StartTime = (hour << 8) | minute  # Combine hour and minute into a 16-bit word
-    
-    hour, minute = map(int, timeOff.split(":"))  # Split time into hour and minute as integers
-    hour = "0x"+str(hour)
-    minute = "0x"+str(minute)
-    hour = int(hour, 16)
-    minute = int(minute, 16)
-    EndTime = (hour << 8) | minute  # Combine hour and minute into a 16-bit word
+            # Parse the settings as usual
+            temp1, humid1, light1, dayLight1, sample1, mode1, count1, timeOn, timeOff = [
+                line.strip().split(',')[0] for line in lines[:9]
+            ]
 
-    return mode1, temp1, humid1, light1, dayLight1, sample1, count1, timeOn, timeOff, StartTime, EndTime
+            temp1 = int(temp1.split("=")[1])
+            humid1 = int(humid1.split("=")[1])
+            light1 = int(light1.split("=")[1])
+            dayLight1 = int(dayLight1.split("=")[1])
+            sample1 = int(sample1.split("=")[1])
+            mode1 = mode1.split("=")[1]
+            count1 = int(count1.split("=")[1])
+            timeOn = timeOn.split("=")[1]
+            timeOff = timeOff.split("=")[1]
+
+            # Time conversion logic (to Modbus format)
+            hour, minute = map(int, timeOn.split(":"))
+            StartTime = (hour << 8) | minute  # Combine hour and minute into 16-bit word
+
+            hour, minute = map(int, timeOff.split(":"))
+            EndTime = (hour << 8) | minute  # Combine hour and minute into 16-bit word
+
+            return temp1, humid1, light1, dayLight1, sample1, mode1, count1, timeOn, timeOff, StartTime, EndTime
+
+        except (OSError, IOError) as e:
+            # If the file is locked or access is denied, handle the exception
+            print(f"Could not access {settings_file} (attempt {retries + 1}/{max_retries}). Retrying in {retry_delay} seconds...")
+            retries += 1
+            time.sleep(retry_delay)
+
+    # If the maximum retries are exceeded, raise an error or return a fallback value
+    raise TimeoutError(f"Could not access {settings_file} after {max_retries} retries.")
 
 # Initialize previous values to None (since nothing has been written yet)
 prev_temp = None
@@ -124,7 +137,7 @@ except FileExistsError:
    
 try:
     # Read the initial settings
-    mode1, temp1, humid1, light1, dayLight1, sample1, count1, timeOn, timeOff, StartTime, EndTime = read_settings()
+    temp1, humid1, light1, dayLight1, sample1, mode1, count1, timeOn, timeOff, StartTime, EndTime = read_settings()
     
     while md.c.is_open:  # Continue the loop while the Modbus connection is open
         # Check if settings.txt has been modified
@@ -132,7 +145,7 @@ try:
         if current_mod_time != last_mod_time:
             # If modified, read the new settings
             print("Detected changes in settings.txt, updating settings.")
-            mode1, temp1, humid1, light1, dayLight1, sample1, count1, timeOn, timeOff, StartTime, EndTime = read_settings()
+            temp1, humid1, light1, dayLight1, sample1, mode1, count1, timeOn, timeOff, StartTime, EndTime = read_settings()
             
             # Only write to the Modbus if the value has changed
             if temp1 != prev_temp:
@@ -202,7 +215,7 @@ try:
         
             # Append the new data to the CSV file
             with open(csv_file, 'a', newline='') as file:
-                # Lock the file before writing
+                # Lock the file before writing 
                 lock_file(file)
             
                 writer = csv.writer(file)
@@ -250,7 +263,7 @@ try:
                 reader = csv.DictReader(file)
                 for row in reader:
                     
-                    mode1, temp1, humid1, light1, dayLight1, sample1, count1, timeOn, timeOff, StartTime, EndTime = read_settings()
+                    temp1, humid1, light1, dayLight1, sample1, mode1, count1, timeOn, timeOff, StartTime, EndTime = read_settings()
                     if mode1 != "Custom":
                         break
                     
@@ -284,7 +297,7 @@ try:
                         unlock_file(file)
 
                     # Wait for the time corresponding to the CSV data (simulating time in minutes)
-                    time.sleep(60)  # Sleep for 60 seconds to simulate one minute in the CSV
+                    time.sleep(sample1*60)  # Sleep for 60 seconds to simulate one minute in the CSV
             
 except KeyboardInterrupt:
     # Handle keyboard interrupt (Ctrl+C) to gracefully close the connection

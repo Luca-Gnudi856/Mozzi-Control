@@ -61,6 +61,16 @@
             <input type="number" id="setSamplingDurationHours" placeholder="Hours" min="0">
             <input type="number" id="setSamplingDurationMinutes" placeholder="Minutes" min="0" max="59">
             <br><br>
+            <label for="minuteCount">Set Time in Cycle</label>
+            <input type="number" id="setMinuteCountHours" placeholder="Hours" min="0" max="24">
+            <input type="number" id="setMinuteCountMinutes" placeholder="Minutes" min="0" max="59"> 
+            <br><br>
+            <label for="timeOn">Set Time On</label>
+            <input type="time" id="timeOn" placeholder="hh:mm">
+            <br><br>
+            <label for="timeOff">Set Time Off</label>
+            <input type="time" id="timeOff" placeholder="hh:mm">
+            <br><br>  
             <button onclick="setParameters()">Set Parameters</button>
            
         </section>
@@ -174,7 +184,10 @@
             const samplingDurationHours = parseInt(document.getElementById('setSamplingDurationHours').value, 10);
             const samplingDurationMinutes = parseInt(document.getElementById('setSamplingDurationMinutes').value, 10);
             const lightingMode = document.getElementById('lightingMode').value; 
-
+            const minuteCountHours = parseInt(document.getElementById('setMinuteCountHours').value,10);
+            const minuteCountMinutes = parseInt(document.getElementById('setMinuteCountMinutes').value,10);
+            const timeOn = document.getElementById('timeOn').value;
+            const timeOff = document.getElementById('timeOff').value;
             //validate the input for humidity
             if(humidity < 0 || humidity > 100){
                 alert('Please enter valid humidity between 0% and 100%');
@@ -183,7 +196,7 @@
 
             // Validate the input for hours and minutes
             if (dayLengthHours < 0 || dayLengthHours > 24 || dayLengthMinutes < 0 || dayLengthMinutes > 59) {
-                alert('Please enter valid hours (0-24) and minutes (0-59).');
+                alert('Please enter valid hours (0-24) and minutes (0-59) for Day Length.');
                 return;
             }
 
@@ -221,6 +234,26 @@
                 totalSamplingDuration = (hours * 60) + minutes;
             }
 
+            // Validate the input for hours and minutes
+            if (minuteCountHours < 0 || minuteCountHours > 24 || minuteCountMinutes < 0 || minuteCountMinutes > 59) {
+                alert('Please enter valid hours (0-24) and minutes (0-59) for Time in Cycle');
+                return;
+            }
+
+            let totalMinuteCount=null;
+            if(!minuteCountHours && !minuteCountMinutes){
+                totalMinuteCount = "";
+            } else{
+                const hours = parseInt(minuteCountHours) || 0;
+                const minutes = parseInt(minuteCountMinutes) || 0;
+                totalMinuteCount = (hours*60) + minutes;
+            }
+
+            if(totalMinuteCount < 0 || totalMinuteCount > 1440){
+                alert('Please enter a time between 0 and 24 hours');
+                return;
+            }
+
             //const totalSamplingDuration = (samplingDurationHours * 60) + samplingDurationMinutes;
 
             try {
@@ -237,6 +270,10 @@
                         dayLength: totalDayLength,
                         samplingDuration: totalSamplingDuration,
                         lightingMode:lightingMode,
+                        minuteCount: totalMinuteCount,
+                        timeOn: timeOn,
+                        timeOff: timeOff,
+
                     }),
                 });
 
