@@ -90,10 +90,10 @@ app.post('/setParameters', async (req, res) => {
         maxLight = currentSettings.maxLighting;
     }
 
-    if (dayLength && !isNaN(parseInt(dayLength, 10))) {
+    if (dayLength) {
         dayLen = dayLength;
     } else {
-        daylen = currentSettings.dayLength;
+        dayLen = currentSettings.dayLength;
     }
 
     if(samplingDuration){
@@ -183,27 +183,27 @@ app.post('/setParameters', async (req, res) => {
 //         res.status(500).json({ message: 'Error fetching data.' });
 //     }
 // });
-async function getDataFromCSV() {
-    const data = [];
-    const filePath = path.join(__dirname, 'data.csv'); // Adjust the path as needed
+// async function getDataFromCSV() {
+//     const data = [];
+//     const filePath = path.join(__dirname, 'data.csv'); // Adjust the path as needed
 
-    return new Promise((resolve, reject) => {
-        fs.createReadStream(filePath)
-            .pipe(csv())
-            .on('data', (row) => {
-                data.push(row);
-                console.log('Row read:', row); // Debugging line to see the rows being read
-            })
-            .on('end', () => {
-                console.log('Finished reading CSV. Total rows:', data.length); // Debugging line
-                resolve(data);
-            })
-            .on('error', (error) => {
-                console.error('Error reading CSV:', error); // Improved error logging
-                reject(error);
-            });
-    });
-}
+//     return new Promise((resolve, reject) => {
+//         fs.createReadStream(filePath)
+//             .pipe(csv())
+//             .on('data', (row) => {
+//                 data.push(row);
+//                 console.log('Row read:', row); // Debugging line to see the rows being read
+//             })
+//             .on('end', () => {
+//                 console.log('Finished reading CSV. Total rows:', data.length); // Debugging line
+//                 resolve(data);
+//             })
+//             .on('error', (error) => {
+//                 console.error('Error reading CSV:', error); // Improved error logging
+//                 reject(error);
+//             });
+//     });
+// }
 
 // app.get('/data', async (req, res) => {
 //     const startDate = req.query.start;
@@ -1148,6 +1148,8 @@ app.get('/status', (req, res) => {
     } else if (connectionStatus === 'failed') {
         console.log("status lastconnection error:",lastConnectionError);
         return res.status(500).send({ status: 'failed', error: lastConnectionError });
+    } else if(connectionInProgress === true){
+        return res.status(200).send({ status: `Connection to ${ssid} in progress...` } );
     } else {
         return res.status(200).send({ status: 'idle' });
     }

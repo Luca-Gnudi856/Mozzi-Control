@@ -53,7 +53,7 @@
             <select id="lightingMode">
                 <option value="" disable selected>Lighting Mode</option>
                 <option value="Constant">Constant</option>
-                <option value="Defualt">Default</option>
+                <option value="Default">Default</option>
                 <option value="Custom">Custom</option>
             </select>
             <br><br>
@@ -510,13 +510,13 @@
 
     let combinedChart = null;
     let plotBasedOnTimeRange = false;
-    let UpdateGraph = null;
+    let UpdateGraph = true;
 
     //set to false to plot without time range again.
-    async function plotGraphWithoutTimeRange() {
-        plotBasedOnTimeRange = false;
-        UpdateGraph = true;
-    }
+//     async function plotGraphWithoutTimeRange() {
+//         plotBasedOnTimeRange = false;
+//         UpdateGraph = true;
+//     }
 
     async function plotGraphBasedOnTimeRange() {
         const startDate = document.getElementById('startDate').value;
@@ -544,6 +544,7 @@
 
     async function plotGraphWithoutTimeRange() {
         plotBasedOnTimeRange = false;
+        UpdateGraph = true;
 
         // Reset to plot the entire dataset without filtering by date
         await plotCombinedData();

@@ -60,6 +60,8 @@
     </div>
 
     <script>
+
+        let SSID = null;
          //fetch current network and its priority.
         async function fetchCurrentNetwork() {
             try {
@@ -67,6 +69,45 @@
                 const data = await response.json();
                 document.getElementById('currentNetwork').textContent = data.currentNetwork;
                 document.getElementById('currentPriority').textContent = data.priority;
+
+                if(connectToNew || connectToSaved){
+                    SSID = data.currentNetwork;
+
+                    //statusBox = document.getElementById('status'); //default
+
+                    if (connectToNew) {
+                    statusBox = document.getElementById('status');
+                    } else if (connectToSaved) {
+                    statusBox = document.getElementById('statusSavedConnect');
+                    }
+
+                    // If statusBox is still null, throw an error
+                    if (!statusBox) {
+                    throw new Error("Status box element not found");
+                    }
+                    // if(connectToSaved){
+                    //     statusBox = 'statusSavedConnect';
+                    // }else {
+                    //     statusBox = 'status';
+                    // }
+
+                    // Fetch the connection status
+                    const statusResponse = await fetch('/status');
+                    const statusData = await statusResponse.json();
+
+                    if (statusData.status === 'connected') {
+                        statusBox.textContent = `Successfully connected to ${SSID}`;
+                    } else if (statusData.status === 'failed') {
+                        statusBox.textContent = `Failed to connect: ${statusData.error}`;
+                    } else if (statusData.status === 'in_progress') {
+                        statusBox.textContent = `Connection in progress...`;
+                    } else {
+                    statusBox.textContent = 'Idle';
+                    }
+
+                }
+
+            
             } catch (error) {
                 console.error('Error fetching current network:', error);
                 document.getElementById('currentNetwork').textContent = 'Error fetching current network';
@@ -74,7 +115,7 @@
             }
         }
 
-        setInterval(fetchCurrentNetwork, 5000);//Checks the current network every 5s.
+        setInterval(fetchCurrentNetwork, 2000);//Checks the current network every 5s.
 
         function togglePassword() {
             const passwordField = document.getElementById('password');
@@ -144,15 +185,20 @@
             }
         }
        // setInterval(fetchSavedAvailableNetworks, 5000);//Checks the current network every 5s.
-
+        let connectToSaved = false;
        // Function to handle connecting to a saved network
        // Function to handle connecting to a saved network
         document.getElementById('connectSavedButton').addEventListener('click', async () => {
             const ssid = document.getElementById('savedNetworkSelect').value;
             const Status = document.getElementById('statusSavedConnect');
-            const retryCount = 40;  // Number of polling attempts
+            const retryCount = 80;  // Number of polling attempts
             const retryDelay = 1000;  // Delay between retries (milliseconds)
             const pollDelay = 1000;  // Delay before starting polling (milliseconds)
+
+            SSID = ssid; //give to global var
+
+            connectToSaved = true;
+            connectToNew = false;
 
             if (!ssid) {
                 Status.textContent = 'Please select a network to connect to.';
@@ -334,13 +380,20 @@
         //     // }
         // }
 
-        async function connect(retryCount = 40, retryDelay = 2000) {
+        let connectToNew = false;
+
+        async function connect(retryCount = 100, retryDelay = 2000) {
             const ssid = document.getElementById('networkSelect').value;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const priority = document.getElementById('priority').value;
             const status = document.getElementById('status');
             const pollDelay = 3000;  // Delay before polling begins
+
+            SSID = ssid; //give to global var
+
+            connectToSaved = false;
+            connectToNew = true;
 
             if (!ssid || !password) {
                 status.textContent = 'Please enter both SSID and password.';
