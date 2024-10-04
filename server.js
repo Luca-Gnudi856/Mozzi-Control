@@ -44,6 +44,17 @@ async function readCurrentSettings(filePath) {
     }
 }
 
+// Endpoint to fetch the current parameters
+app.get('/getParameters', async (req, res) => {
+    try {
+        const currentSettings = await readCurrentSettings('setting.txt');
+        res.json(currentSettings);
+    } catch (err) {
+        console.error('Failed to fetch settings:', err);
+        res.status(500).send('Failed to retrieve settings.');
+    }
+});
+
 // Function to write to file with exclusive access
 async function writeToFileExclusive(filePath, data) {
     let fileHandle;

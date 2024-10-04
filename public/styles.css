@@ -15,11 +15,22 @@ body {
 } */
 
 /* Navbar logo */
+/* .navbar-logo {
+    height: 35px; 
+    width: 35px;
+    margin-right: 10px;
+    padding: 0;
+    margin: 0; 
+    display: block;
+} */
+
 .navbar-logo {
-    height: 30px;  /* Adjust the size as needed */
-    width: 30px;
-    margin-right: 10px; /* Add spacing between logo and next element */
-    vertical-align: middle; /* Aligns the logo with text */
+    position: absolute;
+    top: 4px;
+    left: 90%;
+    margin: 0;
+    padding: 0;
+    height: 40px; /* Set a height if needed, or leave it auto */
 }
 
 .navbar {
@@ -429,4 +440,57 @@ canvas {
         border-left-color: #2ecc71;
         color: #2ecc71;
     }
+}
+
+/* Mosquito Mode styles */
+.mosquito-mode {
+    background-color: #8B0000; /* Dark red background */
+    color: #FF6347; /* Blood red for text */
+}
+
+
+.mosquito-mode h1,
+.mosquito-mode h2,
+.mosquito-mode h3,
+.mosquito-mode h4,
+.mosquito-mode h5,
+.mosquito-mode h6 {
+    color: #FF0000; /* Bright red for buttons and headings */
+   
+    border: none;
+}
+
+.mosquito-mode button{
+    background-color: #FF0000;
+}
+
+.mosquito-mode body {
+    background-color: #222222; /* Dark background */
+    color: #ec0707; /* Light text color */
+}
+
+.mosquito-mode a {
+    color: #FF4500; /* Blood red links */
+}
+
+/* .mosquito-mode input[type="text"], input[type="password"], input[type="number"], select {
+    background-color: #333;
+    color: #db0505;
+    border: 1px solid #555;
+} */
+
+.mosquito-mode label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #f70202;
+}
+
+.mosquito-mode table, th, td {
+    border: 1px solid #555555;
+    color: #db0b0b;
+}
+
+.mosquito-mode button:hover {
+    background-color: #990000; /* Darker red on hover */
 }

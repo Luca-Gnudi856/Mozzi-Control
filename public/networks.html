@@ -14,6 +14,7 @@
         <a href="#"><img src="/android-chrome-512x512.png" alt="Logo" class="navbar-logo"></a>
         <a href="index.html">Home</a>
         <a href="networks.html" class="active">Available Networks</a>
+        <button id="mosquitoModeBtn">Mosquito Mode</button>
     </div>
 
     <!-- Available Networks Section -->
@@ -27,7 +28,7 @@
                 <!-- Saved networks will be added here dynamically -->
             </select>
             <br><br>
-            <button id="connectSavedButton">Connect</button>
+            <button id="connectSavedButton">Connect</button> &nbsp; <button onclick="fetchSavedAvailableNetworks()">Refresh Saved Networks</button>
             <p id="statusSavedConnect"></p>
             <br><br>
             <h2>Connect to a New Network (or change password)</h2>
@@ -54,7 +55,7 @@
                 <option value="10">10</option>
             </select>
             <br><br>
-            <button onclick="connect()">Connect</button>
+            <button onclick="connect()">Connect</button> &nbsp <button onclick="fetchAvailableNetworks">Refresh Available Networks</button>
             <p id="status"></p>
         </section>
     </div>
@@ -185,15 +186,16 @@
             }
         }
        // setInterval(fetchSavedAvailableNetworks, 5000);//Checks the current network every 5s.
-        let connectToSaved = false;
+        let connectToSaved = false; // variable to determine which status bloak the fetched status belongs to.
        // Function to handle connecting to a saved network
        // Function to handle connecting to a saved network
         document.getElementById('connectSavedButton').addEventListener('click', async () => {
             const ssid = document.getElementById('savedNetworkSelect').value;
             const Status = document.getElementById('statusSavedConnect');
-            const retryCount = 80;  // Number of polling attempts
-            const retryDelay = 1000;  // Delay between retries (milliseconds)
-            const pollDelay = 1000;  // Delay before starting polling (milliseconds)
+            const statusConnectToNew = document.getElementById('status');
+            // const retryCount = 80;  // Number of polling attempts
+            // const retryDelay = 1000;  // Delay between retries (milliseconds)
+            // const pollDelay = 1000;  // Delay before starting polling (milliseconds)
 
             SSID = ssid; //give to global var
 
@@ -205,6 +207,7 @@
                 return;
             }
 
+            statusConnectToNew.textContent = '';
             Status.textContent = `Connecting to ${ssid}...`;
 
             try {
@@ -227,10 +230,10 @@
                 }
 
                 // Wait for a few seconds before starting polling (to allow time for connection process to begin)
-                await new Promise(resolve => setTimeout(resolve, pollDelay));
+                //await new Promise(resolve => setTimeout(resolve, pollDelay));
 
                 // Poll the connection status
-                for (let attempt = 0; attempt < retryCount; attempt++) {
+               // for (let attempt = 0; attempt < retryCount; attempt++) {
                     try {
                         // Fetch the connection status from the backend
                         const statusResponse = await fetch('/status');
@@ -252,19 +255,19 @@
                         }
 
                         // Update status for in-progress attempt
-                        Status.textContent = `Attempt ${attempt + 1}: Still trying to connect...`;
+                        //Status.textContent = `Attempt ${attempt + 1}: Still trying to connect...`;
                     } catch (error) {
                         // Handle network errors gracefully during polling
                         console.warn('Error fetching connection status, retrying...', error);
-                        Status.textContent = `Attempt ${attempt + 1}: Waiting for connection...`;
+                        //Status.textContent = `Attempt ${attempt + 1}: Waiting for connection...`;
                     }
 
                     // Wait before the next polling attempt
-                    await new Promise(resolve => setTimeout(resolve, retryDelay));
-                }
+                   // await new Promise(resolve => setTimeout(resolve, retryDelay));
+               // }
 
                 // If max attempts reached and no success
-                Status.textContent = 'Failed to connect: Max attempts reached.';
+               // Status.textContent = 'Failed to connect: Max attempts reached.';
             } catch (error) {
                 // Handle any errors in the connection attempt
                 console.error('Error connecting to saved network:', error);
@@ -380,15 +383,16 @@
         //     // }
         // }
 
-        let connectToNew = false;
+        let connectToNew = false; //variable to determine whic status bloak the status belongs to
 
-        async function connect(retryCount = 100, retryDelay = 2000) {
+        async function connect(/*retryCount = 100, retryDelay = 2000*/) {
             const ssid = document.getElementById('networkSelect').value;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const priority = document.getElementById('priority').value;
             const status = document.getElementById('status');
-            const pollDelay = 3000;  // Delay before polling begins
+            const StatusConnectToSaved = document.getElementById('statusSavedConnect');
+            //const pollDelay = 3000;  // Delay before polling begins
 
             SSID = ssid; //give to global var
 
@@ -400,6 +404,7 @@
                 return;
             }
 
+            StatusConnectToSaved.textContent = '';//clear other status
             status.textContent = `Connecting to ${ssid}...`;
 
             try {
@@ -424,10 +429,10 @@
                 }
 
                 // Wait for a few seconds before starting polling (to allow time for connection process to begin)
-                await new Promise(resolve => setTimeout(resolve, pollDelay));
+                //await new Promise(resolve => setTimeout(resolve, pollDelay));
 
                 // Poll the connection status
-                for (let attempt = 0; attempt < retryCount; attempt++) {
+               // for (let attempt = 0; attempt < retryCount; attempt++) {
                     try {
                         // Fetch the connection status from the backend
                         const statusResponse = await fetch('/status');
@@ -453,15 +458,15 @@
                     } catch (error) {
                         // Handle network errors gracefully during polling
                         console.warn('Error fetching connection status, retrying...', error);
-                        status.textContent = `Attempt ${attempt + 1}: Waiting for connection...`;
+                        //status.textContent = `Attempt ${attempt + 1}: Waiting for connection...`;
                     }
 
                     // Wait before the next polling attempt
-                    await new Promise(resolve => setTimeout(resolve, retryDelay));
-                }
+                   // await new Promise(resolve => setTimeout(resolve, retryDelay));
+               // }
 
                 // If max attempts reached and no success
-                status.textContent = 'Failed to connect: Max attempts reached.';
+                //status.textContent = 'Failed to connect: Max attempts reached.';
             } catch (error) {
                 // Handle any errors in the connection attempt
                 console.error('Error connecting to network:', error);
@@ -469,6 +474,9 @@
             }
         }
 
+        document.getElementById('mosquitoModeBtn').addEventListener('click', function() {
+            document.body.classList.toggle('mosquito-mode');
+        });
 
 
           window.onload = async function() {

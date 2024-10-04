@@ -16,8 +16,18 @@
     <!-- Navigation Bar -->
     <div class="navbar">
         <a href="#"><img src="/android-chrome-512x512.png" alt="Logo" class="navbar-logo"></a>
-        <a href="index.html" class="active">Home</a>
+        <!-- <a href="index.html" class="active">Home</a> -->
+    <div class="dropdown">
+        <button class="dropbtn">Home &#9660 </button>
+        <div class="dropdown-content">
+            <a href="#conditions">Current Conditions</a>
+            <a href="#currentParametersSection">Current Parameter Settings</a>
+            <a href="#parameters">Set Parameters</a>
+            <a href="#data">Data Plot</a>
+        </div>
+    </div>
         <a href="/networks.html">Available Networks</a>
+        <button id="mosquitoModeBtn">Mosquito Mode</button>
     </div>
 
     <!-- Main Content -->
@@ -29,6 +39,21 @@
             <p>Lighting: <span id="lighting">Loading...</span></p>
             <p id="status">Error fetching conditions.</p> <!-- For showing success or error messages  -->
         </section>
+
+        <!-- Section for displaying current parameters -->
+        <section id="currentParametersSection">
+            <h2>Current Parameter Settings</h2>
+            <p><strong>Temperature (°C):</strong> <span id="currentTemperature">Loading...</span></p>
+            <p><strong>Humidity (%):</strong> <span id="currentHumidity">Loading...</span></p>
+            <p><strong>Max Lighting (lux):</strong> <span id="currentMaxLighting">Loading...</span></p>
+            <p><strong>Day Length (min):</strong> <span id="currentDayLength">Loading...</span></p>
+            <p><strong>Sampling Duration (min):</strong> <span id="currentSamplingDuration">Loading...</span></p>
+            <p><strong>Lighting Mode:</strong> <span id="currentLightingMode">Loading...</span></p>
+            <p><strong>Minute Count (min):</strong> <span id="currentMinuteCount">Loading...</span></p>
+            <p><strong>Time On:</strong> <span id="currentTimeOn">Loading...</span></p>
+            <p><strong>Time Off:</strong> <span id="currentTimeOff">Loading...</span></p>
+        </section>
+
 
         <section id="parameters">
             <h1>Set Parameters</h1>
@@ -174,6 +199,28 @@
         // Updaste the conditions every 5s
         setInterval(fetchConditions, 5000);
 
+        async function fetchCurrentParameters() {
+                try {
+                    const response = await fetch('/getParameters');
+                    const data = await response.json();
+                    
+                    // Populate the "Current Parameters" section with the current settings
+                    document.getElementById('currentTemperature').textContent = data.temperature || 'Not Set';
+                    document.getElementById('currentHumidity').textContent = data.humidity || 'Not Set';
+                    document.getElementById('currentMaxLighting').textContent = data.maxLighting || 'Not Set';
+                    document.getElementById('currentDayLength').textContent = data.dayLength || 'Not Set';
+                    document.getElementById('currentSamplingDuration').textContent = data.samplingDuration || 'Not Set';
+                    document.getElementById('currentLightingMode').textContent = data.lightingMode || 'Not Set';
+                    document.getElementById('currentMinuteCount').textContent = data.minuteCount || 'Not Set';
+                    document.getElementById('currentTimeOn').textContent = data.timeOn || 'Not Set';
+                    document.getElementById('currentTimeOff').textContent = data.timeOff || 'Not Set';
+                } catch (err) {
+                    console.error('Failed to fetch current settings:', err);
+                }
+            }
+
+
+
         async function setParameters() {
             const temperature = document.getElementById('setTemperature').value;
             const humidity = document.getElementById('setHumidity').value;
@@ -279,6 +326,7 @@
 
                 if (response.ok) {
                     alert('Parameters set successfully');
+                    fetchCurrentParameters();
                 } else {
                     alert(`Failed to set parameters: ${await response.text()}`);
                 }
@@ -934,7 +982,7 @@
                     x:{
                         grid: {
                             color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
+                        }, 
                         title: {
                             display: true,
                             text: 'Time',
@@ -1060,9 +1108,14 @@
         }
     });
 
+    document.getElementById('mosquitoModeBtn').addEventListener('click', function() {
+        document.body.classList.toggle('mosquito-mode');
+    });
+
 
     window.onload = async function() {
         fetchConditions();
+        fetchCurrentParameters();
         await plotCombinedData(); // Ensure combined data is plotted
         await plotSeparateData(); // Ensure separate data is plotted
 
