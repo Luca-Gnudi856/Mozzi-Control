@@ -199,25 +199,47 @@
         // Updaste the conditions every 5s
         setInterval(fetchConditions, 5000);
 
-        async function fetchCurrentParameters() {
-                try {
-                    const response = await fetch('/getParameters');
-                    const data = await response.json();
-                    
-                    // Populate the "Current Parameters" section with the current settings
-                    document.getElementById('currentTemperature').textContent = data.temperature || 'Not Set';
-                    document.getElementById('currentHumidity').textContent = data.humidity || 'Not Set';
-                    document.getElementById('currentMaxLighting').textContent = data.maxLighting || 'Not Set';
-                    document.getElementById('currentDayLength').textContent = data.dayLength || 'Not Set';
-                    document.getElementById('currentSamplingDuration').textContent = data.samplingDuration || 'Not Set';
-                    document.getElementById('currentLightingMode').textContent = data.lightingMode || 'Not Set';
-                    document.getElementById('currentMinuteCount').textContent = data.minuteCount || 'Not Set';
-                    document.getElementById('currentTimeOn').textContent = data.timeOn || 'Not Set';
-                    document.getElementById('currentTimeOff').textContent = data.timeOff || 'Not Set';
-                } catch (err) {
-                    console.error('Failed to fetch current settings:', err);
-                }
+         // Function to convert minutes into hours and minutes (e.g., "1 hour 30 minutes")
+        function convertMinutesToHoursAndMinutes(minutes) {
+            const hours = Math.floor(minutes / 60);
+            const remainingMinutes = minutes % 60;
+            let result = '';
+
+            if (hours > 0) {
+                result += hours === 1 ? `${hours} hour` : `${hours} hours`;
             }
+
+            if (remainingMinutes > 0) {
+                if (hours > 0) result += ' ';
+                result += remainingMinutes === 1 ? `${remainingMinutes} minute` : `${remainingMinutes} minutes`;
+            }
+
+            return result || '0 minutes'; // Fallback to "0 minutes" if the input is 0
+        }
+
+
+        async function fetchCurrentParameters() {
+            try {
+                const response = await fetch('/getParameters');
+                const data = await response.json();
+                
+                // Populate the "Current Parameters" section with the current settings
+                document.getElementById('currentTemperature').textContent = data.temperature || 'Not Set';
+                document.getElementById('currentHumidity').textContent = data.humidity || 'Not Set';
+                document.getElementById('currentMaxLighting').textContent = data.maxLighting || 'Not Set';
+
+                // Convert dayLength and samplingDuration from minutes to hours and minutes format
+                document.getElementById('currentDayLength').textContent = convertMinutesToHoursAndMinutes(data.dayLength) || 'Not Set';
+                document.getElementById('currentSamplingDuration').textContent = convertMinutesToHoursAndMinutes(data.samplingDuration) || 'Not Set';
+
+                document.getElementById('currentLightingMode').textContent = data.lightingMode || 'Not Set';
+                document.getElementById('currentMinuteCount').textContent = data.minuteCount || 'Not Set';
+                document.getElementById('currentTimeOn').textContent = data.timeOn || 'Not Set';
+                document.getElementById('currentTimeOff').textContent = data.timeOff || 'Not Set';
+            } catch (err) {
+                console.error('Failed to fetch current settings:', err);
+            }
+        }
 
 
 
