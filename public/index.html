@@ -41,7 +41,7 @@
         </section>
 
         <!-- Section for displaying current parameters -->
-        <section id="currentParametersSection">
+        <!-- <section id="currentParametersSection">
             <h2>Current Parameter Settings</h2>
             <p><strong>Temperature (°C):</strong> <span id="currentTemperature">Loading...</span></p>
             <p><strong>Humidity (%):</strong> <span id="currentHumidity">Loading...</span></p>
@@ -52,29 +52,29 @@
             <p><strong>Minute Count (min):</strong> <span id="currentMinuteCount">Loading...</span></p>
             <p><strong>Time On:</strong> <span id="currentTimeOn">Loading...</span></p>
             <p><strong>Time Off:</strong> <span id="currentTimeOff">Loading...</span></p>
-        </section>
+        </section> -->
 
 
         <section id="parameters">
             <h1>Set Parameters</h1>
-            <label for="setTemperature">Set Temperature (°C): </label>
+            <label for="setTemperature">Set Temperature (°C): (Current Setting: <span id="currentTemperature">Loading...</span>)</label>
             <input type="number" id="setTemperature" placeholder="Temperature in °C">
             <!-- <span>�C</span> -->
             <br><br>
-            <label for="setHumidity">Set Humidity (%): </label>
+            <label for="setHumidity">Set Humidity (%): (Current Setting: <span id="currentHumidity">Loading...</span>)</label>
             <input type="number" id="setHumidity" placeholder="Humidity in %" min="0" max="100">
             <!-- <span>%</span> -->
             <br><br>
-            <label for="setMaxLighting">Set Maximum Lighting (lux): </label>
+            <label for="setMaxLighting">Set Maximum Lighting (lux): (Current Setting: <span id="currentMaxLighting">Loading...</span>)</label>
             <input type="number" id="setMaxLighting" placeholder="Max Lighting in lux">
             <!-- <span>lux</span> -->
             <br><br>
-            <label for="setDayLength">Set Length of Daylight (hours and minutes): </label>
+            <label for="setDayLength">Set Length of Daylight (hours and minutes): (Current Setting: <span id="currentDayLength">Loading...</span>)</label>
             <input type="number" id="setDayLengthHours" placeholder="Hours" min="0" max="24">
             <input type="number" id="setDayLengthMinutes" placeholder="Minutes" min="0" max="59">
             <!-- <span>hours and minutes</span> -->
             <br><br>
-            <label for="lightingMode">Set Lighting Mode</label>
+            <label for="lightingMode">Set Lighting Mode: (Current Mode: <span id="currentLightingMode">Loading...</span>) </label>
             <select id="lightingMode">
                 <option value="" disable selected>Lighting Mode</option>
                 <option value="Constant">Constant</option>
@@ -82,18 +82,18 @@
                 <option value="Custom">Custom</option>
             </select>
             <br><br>
-            <label for="setSamplingDuration">Set Sampling Period (hours and minutes): </label>
+            <label for="setSamplingDuration">Set Sampling Period (hours and minutes): (Current Setting: <span id="currentSamplingDuration">Loading...</span>)</label>
             <input type="number" id="setSamplingDurationHours" placeholder="Hours" min="0">
             <input type="number" id="setSamplingDurationMinutes" placeholder="Minutes" min="0" max="59">
             <br><br>
-            <label for="minuteCount">Set Time in Cycle</label>
+            <label for="minuteCount">Set Time in Cycle (Current Setting: <span id="currentMinuteCount">Loading...</span>)</label>
             <input type="number" id="setMinuteCountHours" placeholder="Hours" min="0" max="24">
             <input type="number" id="setMinuteCountMinutes" placeholder="Minutes" min="0" max="59"> 
             <br><br>
-            <label for="timeOn">Set Time On</label>
+            <label for="timeOn">Set Time On (Current Setting: <span id="currentTimeOn">Loading...</span>)</label>
             <input type="time" id="timeOn" placeholder="hh:mm">
             <br><br>
-            <label for="timeOff">Set Time Off</label>
+            <label for="timeOff">Set Time Off (Current Setting: <span id="currentTimeOff">Loading...</span>)</label>
             <input type="time" id="timeOff" placeholder="hh:mm">
             <br><br>  
             <button onclick="setParameters()">Set Parameters</button>
