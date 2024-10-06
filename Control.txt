@@ -1,0 +1,10 @@
+temperature=28
+humidity=60
+maxLighting=1000
+dayLength=600
+samplingDuration=1
+lightingMode=Default
+minuteCount=70
+timeOn=10:00
+timeOff=22:00
+mosquitoMode=true

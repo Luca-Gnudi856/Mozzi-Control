@@ -21,7 +21,7 @@
         <button class="dropbtn">Home &#9660 </button>
         <div class="dropdown-content">
             <a href="#conditions">Current Conditions</a>
-            <a href="#currentParametersSection">Current Parameter Settings</a>
+            <!-- <a href="#currentParametersSection">Current Parameter Settings</a> -->
             <a href="#parameters">Set Parameters</a>
             <a href="#data">Data Plot</a>
         </div>
@@ -40,19 +40,19 @@
             <p id="status">Error fetching conditions.</p> <!-- For showing success or error messages  -->
         </section>
 
-        <!-- Section for displaying current parameters -->
-        <!-- <section id="currentParametersSection">
-            <h2>Current Parameter Settings</h2>
-            <p><strong>Temperature (°C):</strong> <span id="currentTemperature">Loading...</span></p>
-            <p><strong>Humidity (%):</strong> <span id="currentHumidity">Loading...</span></p>
-            <p><strong>Max Lighting (lux):</strong> <span id="currentMaxLighting">Loading...</span></p>
-            <p><strong>Day Length (min):</strong> <span id="currentDayLength">Loading...</span></p>
-            <p><strong>Sampling Duration (min):</strong> <span id="currentSamplingDuration">Loading...</span></p>
-            <p><strong>Lighting Mode:</strong> <span id="currentLightingMode">Loading...</span></p>
-            <p><strong>Minute Count (min):</strong> <span id="currentMinuteCount">Loading...</span></p>
-            <p><strong>Time On:</strong> <span id="currentTimeOn">Loading...</span></p>
-            <p><strong>Time Off:</strong> <span id="currentTimeOff">Loading...</span></p>
-        </section> -->
+        <!-- Section for displaying control parameters -->
+        <section id="controlParametersSection">
+            <h2>Control Parameter Settings</h2>
+            <p><strong>Temperature (°C):</strong> <span id="controlTemperature">Loading...</span></p>
+            <p><strong>Humidity (%):</strong> <span id="controlHumidity">Loading...</span></p>
+            <p><strong>Max Lighting (lux):</strong> <span id="controlMaxLighting">Loading...</span></p>
+            <p><strong>Day Length (min):</strong> <span id="controlDayLength">Loading...</span></p>
+            <p><strong>Sampling Duration (min):</strong> <span id="controlSamplingDuration">Loading...</span></p>
+            <p><strong>Lighting Mode:</strong> <span id="controlLightingMode">Loading...</span></p>
+            <p><strong>Minute Count (min):</strong> <span id="controlMinuteCount">Loading...</span></p>
+            <p><strong>Time On:</strong> <span id="controlTimeOn">Loading...</span></p>
+            <p><strong>Time Off:</strong> <span id="controlTimeOff">Loading...</span></p>
+        </section>
 
 
         <section id="parameters">
@@ -217,10 +217,127 @@
             return result || '0 minutes'; // Fallback to "0 minutes" if the input is 0
         }
 
+        let setControlParameters;
+
+        document.getElementById('mosquitoModeBtn').addEventListener('click', async function() {
+            // Show a confirmation popup when trying to enable mosquito mode
+            if (!setControlParameters) {
+                const confirmed = confirm("You are about to enter Mosquito Mode. This will immediately apply control parameters and allow setting new ones.");
+                
+                if (confirmed) {
+                    // If confirmed, enter mosquito mode and set control parameters
+                    setControlParameters = true;  // Enable control parameters
+
+                    try {
+                        // Send the updated mosquito mode to the backend
+                        const response = await fetch('/setMosquitoMode', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams({
+                                MosquitoMode: setControlParameters
+                            })
+                        });
+
+                        // Handle the backend response
+                        const result = await response.json();
+                        alert(`Mosquito mode set: ${result.message}`);
+                        document.body.classList.add('mosquito-mode');  // Add mosquito mode styling
+                        fetchCurrentParameters(); //update to show the control parameters
+                       
+                    } catch (error) {
+                        alert(`Error setting Mosquito Mode: ${error.message}`);
+                        setControlParameters = false;
+                    }
+                    
+                } else {
+                    // If not confirmed, do nothing
+                    alert("Mosquito Mode was canceled.");
+                }
+            } else {
+                const confirmed = confirm("You are about to leave Mosquito Mode. This will immediately remove control parameters and set the last parameters.")
+
+                if(confirmed){
+
+                // Toggle mosquito mode off
+                setControlParameters = false;
+                try {
+                        // Send the updated mosquito mode to the backend
+                        const response = await fetch('/setMosquitoMode', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams({
+                                MosquitoMode: setControlParameters
+                            })
+                        });
+
+                        // Handle the backend response
+                        const result = await response.json();
+                        alert(`Mosquito mode set: ${result.message}`);
+                       
+                        document.body.classList.remove('mosquito-mode');
+                        
+                    } catch (error) {
+                        alert(`Error setting Mosquito Mode: ${error.message}`);
+                        setControlParameters = true;
+                    }
+
+                }else{
+                    alert("Mosquito Mode deactivation was cancelled");
+                }
+            }
+
+
+
+
+        });
+
+        async function fetchControlParameters() {
+            try {
+                const response = await fetch('/getControlParameters');
+                const data = await response.json();
+
+                if(data.mosquitoMode === 'true'){
+                    setControlParameters = true;
+                    document.body.classList.add('mosquito-mode');
+                }else{
+                    setControlParameters = false; 
+                    document.body.classList.remove('mosquito-mode');
+                }
+                
+                // Populate the "control Parameters" section with the control settings
+                document.getElementById('controlTemperature').textContent = data.temperature || 'Not Set';
+                document.getElementById('controlHumidity').textContent = data.humidity || 'Not Set';
+                document.getElementById('controlMaxLighting').textContent = data.maxLighting || 'Not Set';
+
+                // Convert dayLength and samplingDuration from minutes to hours and minutes format
+                document.getElementById('controlDayLength').textContent = convertMinutesToHoursAndMinutes(data.dayLength) || 'Not Set';
+                document.getElementById('controlSamplingDuration').textContent = convertMinutesToHoursAndMinutes(data.samplingDuration) || 'Not Set';
+
+                document.getElementById('controlLightingMode').textContent = data.lightingMode || 'Not Set';
+                document.getElementById('controlMinuteCount').textContent = data.minuteCount || 'Not Set';
+                document.getElementById('controlTimeOn').textContent = data.timeOn || 'Not Set';
+                document.getElementById('controlTimeOff').textContent = data.timeOff || 'Not Set';
+            } catch (err) {
+                console.error('Failed to fetch control settings:', err);
+            }
+        }
+
 
         async function fetchCurrentParameters() {
             try {
-                const response = await fetch('/getParameters');
+
+                let response;
+                //show the relevant parameters
+                if (setControlParameters){
+                    response = await fetch('getControlParameters');
+                } else{
+                    response = await fetch('/getParameters');
+                }
+                
                 const data = await response.json();
                 
                 // Populate the "Current Parameters" section with the current settings
@@ -240,7 +357,6 @@
                 console.error('Failed to fetch current settings:', err);
             }
         }
-
 
 
         async function setParameters() {
@@ -349,6 +465,7 @@
                 if (response.ok) {
                     alert('Parameters set successfully');
                     fetchCurrentParameters();
+                    fetchControlParameters();
                 } else {
                     alert(`Failed to set parameters: ${await response.text()}`);
                 }
@@ -847,7 +964,7 @@
 
             // Check if the startDate and endDate elements exist
             if (!startDateElem) {
-                console.error('Start date input field not found');
+                alert('Start date input field not found');
                 return;
             }
             
@@ -1109,7 +1226,7 @@
 
         // Ensure startDate is provided
         if (!startDate) {
-            console.error('Start date is required.');
+            alert('Start date is required.');
             document.getElementById('status').textContent = 'Please provide a start date.';
             return;
         }
@@ -1130,13 +1247,11 @@
         }
     });
 
-    document.getElementById('mosquitoModeBtn').addEventListener('click', function() {
-        document.body.classList.toggle('mosquito-mode');
-    });
 
 
     window.onload = async function() {
         fetchConditions();
+        fetchControlParameters();
         fetchCurrentParameters();
         await plotCombinedData(); // Ensure combined data is plotted
         await plotSeparateData(); // Ensure separate data is plotted
