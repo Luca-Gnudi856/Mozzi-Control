@@ -14,7 +14,6 @@
         <a href="#"><img src="/android-chrome-512x512.png" alt="Logo" class="navbar-logo"></a>
         <a href="index.html">Home</a>
         <a href="networks.html" class="active">Available Networks</a>
-        <button id="mosquitoModeBtn">Mosquito Mode</button>
     </div>
 
     <!-- Available Networks Section -->
@@ -473,10 +472,6 @@
                 status.textContent = `Network error: ${error.message}`;
             }
         }
-
-        document.getElementById('mosquitoModeBtn').addEventListener('click', function() {
-            document.body.classList.toggle('mosquito-mode');
-        });
 
 
           window.onload = async function() {

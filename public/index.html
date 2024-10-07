@@ -245,6 +245,7 @@
                         alert(`Mosquito mode set: ${result.message}`);
                         document.body.classList.add('mosquito-mode');  // Add mosquito mode styling
                         fetchCurrentParameters(); //update to show the control parameters
+                        console.log('mosquito mode:', setControlParameters);
                        
                     } catch (error) {
                         alert(`Error setting Mosquito Mode: ${error.message}`);
@@ -279,6 +280,7 @@
                         alert(`Mosquito mode set: ${result.message}`);
                        
                         document.body.classList.remove('mosquito-mode');
+                        console.log('mosquito mode:', setControlParameters);
                         
                     } catch (error) {
                         alert(`Error setting Mosquito Mode: ${error.message}`);

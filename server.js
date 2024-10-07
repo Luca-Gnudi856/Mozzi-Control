@@ -120,7 +120,7 @@ app.post('/setMosquitoMode', async (req, res) => {
 
     let status;
 
-    if(setControlParameters){
+    if(setControlParameters === 'true'){
         status = 'activated';
     } else{
         status = 'deactivated'; 
@@ -307,33 +307,40 @@ async function setParametersInternal(newSettings) {
     let filePath;
 
     try {
-        if(!setControlParameters){
+        console.log('setinternal parameters control?', setControlParameters);
+        if(setControlParameters === 'true'){
+
+            filePath = 'Control.txt';
+            
+            let currentSettings = await readCurrentSettings(filePath);
+            currentSettings = updateAllParameters(currentSettings, newSettings);
+            currentSettings.mosquitoMode = 'true';
+            
+            //console.log('current Control.txt settings should read true:', currentSettings);
+            const controlSettingsString = formatSettingsString(currentSettings);  // Format the control settings
+            await writeToFileExclusive(filePath, controlSettingsString);  
+
+            return { success: true, message: 'Parameters set successfully.' };
+
+        } else {
             filePath = 'setting.txt';
 
-            let currentSettings = await readCurrentSettings(filePath); // Added await
+            let currentSettings = await readCurrentSettings(filePath); 
             currentSettings = updateAllParameters(currentSettings, newSettings);
             const settingsString = formatSettingsString(currentSettings);  // Format the settings as a string
             await writeToFileExclusive(filePath, settingsString);  // Write the formatted string to the file
 
             filePath = 'Control.txt';
-            currentSettings.mosquitoMode = 'false';
-            console.log('current setting.txt settings should read false: ', currentSettings);
-            const controlSettingsString = formatSettingsString(currentSettings);  // Format the control settings
-            await writeToFileExclusive(filePath, controlSettingsString);  
-
-            return { success: true, message: 'Parameters set successfully.' };
-        } else {
-            filePath = 'Control.txt';
-            
-            let currentSettings = await readCurrentSettings(filePath); // Added await
+            newSettings = ''; //ensure that the other settings are not changed
+            currentSettings = await readCurrentSettings(filePath);
             currentSettings = updateAllParameters(currentSettings, newSettings);
-            currentSettings.mosquitoMode = 'true';
-            
-            console.log('current Control.txt settings should read true:', currentSettings);
+            currentSettings.mosquitoMode = 'false';
+            //console.log('current setting.txt settings should read false: ', currentSettings);
             const controlSettingsString = formatSettingsString(currentSettings);  // Format the control settings
             await writeToFileExclusive(filePath, controlSettingsString);  
 
             return { success: true, message: 'Parameters set successfully.' };
+           
         }
     } catch (err) {
         console.error('Failed to write to file:', err);
