@@ -14,9 +14,9 @@ else:
 md = ModbusClass()
 md.Connect()
 
-csv_file = 'host_own_website/data.csv'
-settings_file = 'host_own_website/setting.txt'
-custom_file = 'host_own_website/Custom.csv'
+csv_file = 'data.csv'
+settings_file = 'setting.txt'
+custom_file = 'Custom.csv'
 
 def writeDuration(value):
     md.WriteSingleDigital(8256, 1)
