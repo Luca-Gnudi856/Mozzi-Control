@@ -54,7 +54,7 @@
                 <option value="10">10</option>
             </select>
             <br><br>
-            <button onclick="connect()">Connect</button> &nbsp <button onclick="fetchAvailableNetworks">Refresh Available Networks</button>
+            <button onclick="connect()">Connect</button> &nbsp <button onclick="fetchAvailableNetworks()">Refresh Available Networks</button>
             <p id="status"></p>
         </section>
     </div>
@@ -115,7 +115,7 @@
             }
         }
 
-        setInterval(fetchCurrentNetwork, 2000);//Checks the current network every 5s.
+        setInterval(fetchCurrentNetwork, 1000);//Checks the current network 
 
         function togglePassword() {
             const passwordField = document.getElementById('password');
@@ -196,15 +196,15 @@
             // const retryDelay = 1000;  // Delay between retries (milliseconds)
             // const pollDelay = 1000;  // Delay before starting polling (milliseconds)
 
-            SSID = ssid; //give to global var
-
-            connectToSaved = true;
-            connectToNew = false;
-
             if (!ssid) {
                 Status.textContent = 'Please select a network to connect to.';
                 return;
             }
+
+            SSID = ssid; //give to global var
+
+            connectToSaved = true;
+            connectToNew = false;
 
             statusConnectToNew.textContent = '';
             Status.textContent = `Connecting to ${ssid}...`;
@@ -393,15 +393,15 @@
             const StatusConnectToSaved = document.getElementById('statusSavedConnect');
             //const pollDelay = 3000;  // Delay before polling begins
 
-            SSID = ssid; //give to global var
-
-            connectToSaved = false;
-            connectToNew = true;
-
             if (!ssid || !password) {
                 status.textContent = 'Please enter both SSID and password.';
                 return;
             }
+
+            SSID = ssid; //give to global var
+
+            connectToSaved = false;
+            connectToNew = true;
 
             StatusConnectToSaved.textContent = '';//clear other status
             status.textContent = `Connecting to ${ssid}...`;

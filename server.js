@@ -331,9 +331,9 @@ async function setParametersInternal(newSettings) {
             await writeToFileExclusive(filePath, settingsString);  // Write the formatted string to the file
 
             filePath = 'Control.txt';
-            newSettings = ''; //ensure that the other settings are not changed
+            //newSettings = ''; //ensure that the other settings are not changed
             currentSettings = await readCurrentSettings(filePath);
-            currentSettings = updateAllParameters(currentSettings, newSettings);
+           // currentSettings = updateAllParameters(currentSettings, newSettings);
             currentSettings.mosquitoMode = 'false';
             //console.log('current setting.txt settings should read false: ', currentSettings);
             const controlSettingsString = formatSettingsString(currentSettings);  // Format the control settings
@@ -1362,6 +1362,10 @@ method=auto
                                     console.log('Incorrect password');
                                     connectionStatus = 'failed';
                                     lastConnectionError = 'Incorrect password.';
+
+                                    // restartTelebit()
+                                    // .then(result => console.log(result))
+                                    // .catch(error => console.error(error));
                                 } else {
                                     console.log(`Reconnection attempt to ${ssid} failed: ${stderr}`);
                                     connectionStatus = 'failed';
@@ -1394,6 +1398,19 @@ method=auto
                                 console.log('Incorrect password');
                                 connectionStatus = 'failed';
                                 lastConnectionError = 'Incorrect password.';
+
+                                // restartTelebit()
+                                //     .then(result => console.log(result))
+                                //     .catch(error => console.error(error));
+                                // exec('sudo systemctl restart NetworkManager', (err, stdout, stderr) => {
+                                //     if (err) {
+                                //         console.error('Failed to restart NetworkManager:', stderr);
+                                //         connectionStatus = 'failed';
+                                //         lastConnectionError = 'Failed to restart NetworkManager.';
+                                //         connectionInProgress = false;
+                                //         return;
+                                //     }
+                                // });
                             } else {
                                 console.log(`Final attempt to ${ssid} failed: ${stderr}`);
                                 connectionStatus = 'failed';
@@ -1446,6 +1463,23 @@ app.post('/connectSaved', (req, res) => {
                 connectionStatus = 'failed';
                 lastConnectionError = 'Incorrect password.';
                 console.log(`Incorrect password for ${ssid}`);
+                // restartTelebit()
+                //     .then(result => console.log(result))
+                //     .catch(error => console.error(error));
+
+                
+                
+
+                // exec('sudo systemctl restart NetworkManager', (err, stdout, stderr) => {
+                //     if (err) {
+                //         console.error('Failed to restart NetworkManager:', stderr);
+                //         connectionStatus = 'failed';
+                //         lastConnectionError = 'Failed to restart NetworkManager.';
+                //         connectionInProgress = false;
+                //         return;
+                //     }
+                // });
+
                 return res.status(401).send(lastConnectionError);
             }
 
@@ -1490,6 +1524,51 @@ app.get('/status', (req, res) => {
         return res.status(200).send({ status: 'idle' });
     }
 });
+
+// Function to restart the Telebit service
+// function restartTelebit() {
+//     exec('systemctl --user restart telebit-restart.service', (error, stdout, stderr) => {
+//         if (error) {
+//             console.error(`Error restarting Telebit: ${error.message}`);
+//             return;
+//         }
+//         if (stderr) {
+//             console.error(`stderr: ${stderr}`);
+//             return;
+//         }
+//         console.log(`Telebit restart output: ${stdout}`);
+//     });
+// }
+
+// function restartTelebit() {
+//     return new Promise((resolve, reject) => {
+//         exec('systemctl restart telebit-restart.service', (error, stdout, stderr) => {
+//             if (error) {
+//                 reject(`Error: ${error.message}`);
+//             } else if (stderr) {
+//                 reject(`stderr: ${stderr}`);
+//             } else {
+//                 resolve(`Telebit restarted successfully: ${stdout}`);
+//             }
+//         });
+//     });
+// }
+
+// function restartTelebit() {
+//     return new Promise((resolve, reject) => {
+//         // Execute the bash script that handles the Telebit restart
+//         exec('/home/mozzi/host_own_website/restart-telebit.sh', (error, stdout, stderr) => {
+//             if (error) {
+//                 reject(`Error: ${error.message}`);
+//             } else if (stderr) {
+//                 reject(`stderr: ${stderr}`);
+//             } else {
+//                 resolve(`Telebit restarted successfully: ${stdout}`);
+//             }
+//         });
+//     });
+// }
+
 
 let currentGateway;
 
