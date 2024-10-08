@@ -58,6 +58,7 @@ app.get('/getParameters', async (req, res) => {
 app.get('/getControlParameters', async (req, res) => {
     try {
         const currentSettings = await readCurrentSettings('Control.txt');
+        setControlParameters = currentSettings.mosquitoMode;
         res.json(currentSettings);
     } catch (err) {
         console.error('Failed to fetch control settings:', err);
