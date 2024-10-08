@@ -7,4 +7,4 @@ lightingMode=Default
 minuteCount=140
 timeOn=08:00
 timeOff=20:00
-mosquitoMode=true
+mosquitoMode=false

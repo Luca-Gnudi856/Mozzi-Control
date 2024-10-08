@@ -262,36 +262,35 @@ app.post('/setMosquitoMode', async (req, res) => {
 // Centralized function to update parameters
 function updateAllParameters(currentSettings, newSettings) {
     
-    if (newSettings.temperature !== undefined) {
+    if (newSettings.temperature !== undefined && newSettings.temperature !== '') {
       currentSettings.temperature = newSettings.temperature;
     }
   
-    if (newSettings.humidity !== undefined) {
+    if (newSettings.humidity !== undefined && newSettings.humidity !== '') {
       currentSettings.humidity = newSettings.humidity;
     }
   
-    if (newSettings.maxLighting !== undefined) {
+    if (newSettings.maxLighting !== undefined && newSettings.maxLighting !== '') {
       currentSettings.maxLighting = newSettings.maxLighting;
     }
   
-    if (newSettings.dayLength !== undefined) {
+    if (newSettings.dayLength !== undefined && newSettings.dayLength !== '') {
       currentSettings.dayLength = newSettings.dayLength;
     }
   
-    // Update control parameters
-    if (newSettings.control !== undefined) {
+    if (newSettings.control !== undefined && newSettings.control !== '') {
       currentSettings.control = newSettings.control;
     }
 
-    if (newSettings.minuteCount !== undefined){
+    if (newSettings.minuteCount !== undefined && newSettings.minuteCount !== ''){
         currentSettings.minuteCount = newSettings.minuteCount;
     }
 
-    if(newSettings.timeOn !== undefined){
+    if(newSettings.timeOn !== undefined && newSettings.timeOn !== ''){
         currentSettings.timeOn = newSettings.timeOn;
     }
 
-    if(newSettings.timeOff !== undefined){
+    if(newSettings.timeOff !== undefined && newSettings.timeOff !== ''){
         currentSettings.timeOff = newSettings.timeOff;
     }
   
@@ -313,6 +312,7 @@ async function setParametersInternal(newSettings) {
             filePath = 'Control.txt';
             
             let currentSettings = await readCurrentSettings(filePath);
+            console.log('newSettings for control',newSettings);
             currentSettings = updateAllParameters(currentSettings, newSettings);
             currentSettings.mosquitoMode = 'true';
             

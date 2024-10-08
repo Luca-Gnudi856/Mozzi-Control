@@ -18,3 +18,5 @@ env.bak/
 #data files
 setting.txt
 data.csv
+Control.txt
+Custom.csv

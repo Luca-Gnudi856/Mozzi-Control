@@ -303,11 +303,35 @@
 
                 if(data.mosquitoMode === 'true'){
                     setControlParameters = true;
+
                     document.body.classList.add('mosquito-mode');
                 }else{
                     setControlParameters = false; 
                     document.body.classList.remove('mosquito-mode');
                 }
+
+                try {
+                        // Send the updated mosquito mode to the backend
+                        const response = await fetch('/setMosquitoMode', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams({
+                                MosquitoMode: setControlParameters
+                            })
+                        });
+
+                        // Handle the backend response
+                        const result = await response.json();
+                        //alert(`Mosquito mode set: ${result.message}`);
+                       
+                        // document.body.classList.remove('mosquito-mode');
+                        // console.log('mosquito mode:', setControlParameters);
+                        
+                    } catch (error) {
+                        alert(`Error setting Mosquito Mode: ${error.message}`);
+                    }
                 
                 // Populate the "control Parameters" section with the control settings
                 document.getElementById('controlTemperature').textContent = data.temperature || 'Not Set';
@@ -1256,6 +1280,7 @@
         fetchCurrentParameters();
         await plotCombinedData(); // Ensure combined data is plotted
         await plotSeparateData(); // Ensure separate data is plotted
+
 
         document.getElementById('plotbutton').addEventListener('click', plotGraphBasedOnTimeRange);
         document.getElementById('plotWithoutTimeRange').addEventListener('click', plotGraphWithoutTimeRange);
