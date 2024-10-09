@@ -277,7 +277,7 @@
                         // Handle the backend response
                         const result = await response.json();
                         alert(`Mosquito mode set: ${result.message}`);
-                       
+                        fetchCurrentParameters();
                         document.body.classList.remove('mosquito-mode');
                         console.log('mosquito mode:', setControlParameters);
                         
@@ -343,7 +343,7 @@
                 document.getElementById('controlSamplingDuration').textContent = convertMinutesToHoursAndMinutes(data.samplingDuration) || 'Not Set';
 
                 document.getElementById('controlLightingMode').textContent = data.lightingMode || 'Not Set';
-                document.getElementById('controlMinuteCount').textContent = data.minuteCount || 'Not Set';
+                document.getElementById('controlMinuteCount').textContent = convertMinutesToHoursAndMinutes(data.minuteCount) || 'Not Set';
                 document.getElementById('controlTimeOn').textContent = data.timeOn || 'Not Set';
                 document.getElementById('controlTimeOff').textContent = data.timeOff || 'Not Set';
             } catch (err) {
@@ -375,7 +375,7 @@
                 document.getElementById('currentSamplingDuration').textContent = convertMinutesToHoursAndMinutes(data.samplingDuration) || 'Not Set';
 
                 document.getElementById('currentLightingMode').textContent = data.lightingMode || 'Not Set';
-                document.getElementById('currentMinuteCount').textContent = data.minuteCount || 'Not Set';
+                document.getElementById('currentMinuteCount').textContent = convertMinutesToHoursAndMinutes(data.minuteCount) || 'Not Set';
                 document.getElementById('currentTimeOn').textContent = data.timeOn || 'Not Set';
                 document.getElementById('currentTimeOff').textContent = data.timeOff || 'Not Set';
             } catch (err) {
