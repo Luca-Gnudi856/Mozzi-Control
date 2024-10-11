@@ -306,7 +306,7 @@ function formatSettingsString(settings) {
 async function setParametersInternal(newSettings) {
     let filePath;
     // Get the current timestamp
-    const currentTimestamp = new Date().toLocaleString(); 
+    //const currentTimestamp = new Date().toLocaleString(); 
 
     try {
         console.log('setinternal parameters control?', setControlParameters);
@@ -318,7 +318,7 @@ async function setParametersInternal(newSettings) {
             //console.log('newSettings for control',newSettings);
             currentSettings = updateAllParameters(currentSettings, newSettings);
             currentSettings.mosquitoMode = 'true';
-            currentSettings.lastUpdated = currentTimestamp;  
+            //currentSettings.lastUpdated = currentTimestamp;  
             
             //console.log('current Control.txt settings should read true:', currentSettings);
             const controlSettingsString = formatSettingsString(currentSettings);  // Format the control settings
@@ -331,7 +331,7 @@ async function setParametersInternal(newSettings) {
 
             let currentSettings = await readCurrentSettings(filePath); 
             currentSettings = updateAllParameters(currentSettings, newSettings);
-            currentSettings.lastUpdated = currentTimestamp;  
+            //currentSettings.lastUpdated = currentTimestamp;  
             const settingsString = formatSettingsString(currentSettings);  // Format the settings as a string
             await writeToFileExclusive(filePath, settingsString);  // Write the formatted string to the file
 

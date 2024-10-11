@@ -33,6 +33,16 @@ body {
     height: 40px; /* Set a height if needed, or leave it auto */
 }
 
+.navbar-title {
+    position:absolute;
+    font-size: 24px; /* Adjust the size of the title */
+    color:white; /* Set the color of the title */
+    left: 38%;
+    align-self: center;
+    margin: 0;
+    padding: 0;
+}
+
 .navbar {
     background-color: #333;
     position: fixed;   /* Fixes the navbar at the top of the page */
