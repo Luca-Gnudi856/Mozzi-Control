@@ -6,23 +6,6 @@ body {
     padding: 0;
 }
 
-/* Navbar Styles */
-/* .navbar {
-    background-color: #333;
-    overflow: hidden;
-    z-index: 1;
-    font-family: Arial, Helvetica, sans-serif;
-} */
-
-/* Navbar logo */
-/* .navbar-logo {
-    height: 35px; 
-    width: 35px;
-    margin-right: 10px;
-    padding: 0;
-    margin: 0; 
-    display: block;
-} */
 
 /* General navbar layout using flexbox */
 .navbar {
@@ -209,55 +192,6 @@ h1, h2 {
     margin: 0 auto; /*Center the chart horizontally */
 }
 
-/* Dropdown container */
-/* .dropdown {
-    position: relative;
-    display: inline-block;
-} */
-
-/* Dropdown button
-.dropbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-} */
-
-/* Dropdown content (hidden by default) */
-/* .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-} */
-
-/* Links inside the dropdown */
-/* .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-} */
-
-/* Change color of dropdown links on hover */
-/* .dropdown-content a:hover {
-    background-color: #f1f1f1;
-} */
-
-/* Show the dropdown menu on hover */
-/* .dropdown:hover .dropdown-content {
-    display: block;
-} */
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-/* .dropdown:hover .dropbtn {
-    background-color: #3e8e41;
-} */
-
 
 .container {
     width: 80%;
@@ -269,21 +203,6 @@ h1, h2 {
     margin-top: 20px;
 }
 
-/* .navbar {
-    background-color: #333;
-    overflow: hidden; 
-    font-family: Arial, Helvetica, sans-serif;
-} */
-
-/* .navbar a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-} */
 
 button {
     background-color: #007BFF; /* Blue background */
@@ -390,35 +309,6 @@ canvas {
     color: #2ecc71;
 }
 
-/* 
-      .chartMenu {
-        width: 100vw;
-        height: 40px;
-        background: #1A1A1A;
-        color: rgba(54, 162, 235, 1);
-      }
-      .chartMenu p {
-        padding: 10px;
-        font-size: 20px;
-      }
-      .chartCard {
-        width: 100vw;
-        height: calc(100vh - 40px);
-        background: rgba(54, 162, 235, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .chartBox {
-        width: 700px;
-        padding: 20px;
-        border-radius: 20px;
-        border: solid 3px rgba(54, 162, 235, 1);
-        background: white;
-      }
-      .darkMode{
-        color: white;
-      } */
 
 @media (prefers-color-scheme: dark) {
     body {

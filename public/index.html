@@ -7,12 +7,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <link rel="stylesheet" href="styles.css">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-<!-- <style>
-.darkMode{
-    color: white;
-  }
-</style> -->
-
     <!-- Navigation Bar -->
     <div class="navbar">
         <a href="#"><img src="/android-chrome-512x512.png" alt="Logo" class="navbar-logo"></a>
@@ -63,20 +57,16 @@
             <h1>Set Parameters</h1>
             <label for="setTemperature">Set Temperature (°C): (Current Setting: <span id="currentTemperature">Loading...</span>)</label>
             <input type="number" id="setTemperature" placeholder="Temperature in °C">
-            <!-- <span>�C</span> -->
             <br><br>
             <label for="setHumidity">Set Humidity (%): (Current Setting: <span id="currentHumidity">Loading...</span>)</label>
             <input type="number" id="setHumidity" placeholder="Humidity in %" min="0" max="100">
-            <!-- <span>%</span> -->
             <br><br>
             <label for="setMaxLighting">Set Maximum Lighting (lux): (Current Setting: <span id="currentMaxLighting">Loading...</span>)</label>
             <input type="number" id="setMaxLighting" placeholder="Max Lighting in lux">
-            <!-- <span>lux</span> -->
             <br><br>
             <label for="setDayLength">Set Length of Daylight (hours and minutes): (Current Setting: <span id="currentDayLength">Loading...</span>)</label>
             <input type="number" id="setDayLengthHours" placeholder="Hours" min="0" max="24">
             <input type="number" id="setDayLengthMinutes" placeholder="Minutes" min="0" max="59">
-            <!-- <span>hours and minutes</span> -->
             <br><br>
             <label for="lightingMode">Set Lighting Mode: (Current Mode: <span id="currentLightingMode">Loading...</span>) </label>
             <select id="lightingMode">
@@ -103,22 +93,6 @@
             <button onclick="setParameters()">Set Parameters</button>
            
         </section>
-
-        <!-- <section id="SampleDuration">
-            <h1>Set Data Sampling Duration</h1>
-            <label for="samplingHours">Sampling Duration (hours):</label>
-            <input type="number" id="samplingHours" name="samplingHours" min="0" placeholder="Enter hours">
-            <br>
-            <label for="samplingMinutes">Sampling Duration (minutes):</label>
-            <input type="number" id="samplingMinutes" name="samplingMinutes" min="0" max="59" placeholder="Enter minutes">
-            <br>
-            <button onclick="setSamplingDuration()">Set Duration</button>
-
-            <p id="status"></p> For showing success or error messages 
-
-
-        </section> -->
-            
 
         <section id="data">
             <h1>Data Plot</h1>
@@ -157,58 +131,36 @@
    
 
     <script>
-       
 
-     
-
-// function darkMode(checkbox){
-//             console.log(checkbox.checked);
-//             const x = combinedChart.config.options.scales.x;
-//             const y = combinedChart.config.options.scales.y;
-
-//             if(checkboxText === true){
-//                 x.grid.borderColor = 'white';
-//                 y.grid.borderColor = 'white';
-//                 x.grid.color = 'white';
-//                 y.grid.color = 'white';
-
-//                 document.getElementById('checkboxText').classList.add('darkmode');
-//             } else{
-//                 document.getElementById('checkboxText').classList.remove('darkmode');
-//             }
-
-//             combinedChart.update();
-//         }
-
-        // Function to switch between sections
-        function showSection(sectionId) {
-            var sections = document.getElementsByClassName('section');
-            for (var i = 0; i < sections.length; i++) {
-                sections[i].classList.remove('active');
-            }
-            document.getElementById(sectionId).classList.add('active');
-        }
+        // Function to switch between sections
+        function showSection(sectionId) {
+            var sections = document.getElementsByClassName('section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+            document.getElementById(sectionId).classList.add('active');
+        }
 
 
-        async function fetchConditions() {
-            try {
-                const response = await fetch('/conditions');
-                const conditions = await response.json();
+        async function fetchConditions() {
+            try {
+                const response = await fetch('/conditions');
+                const conditions = await response.json();
 
                 // Clear the status message if conditions are fetched successfully
                 document.getElementById('status').textContent = '';
 
-                document.getElementById('temperature').textContent = conditions.temperature + ' °C';
-                document.getElementById('humidity').textContent = conditions.humidity + ' %';
-                document.getElementById('lighting').textContent = conditions.lighting + ' lux';
-            } catch (error) {
-                console.error('Error fetching conditions:', error);
-                document.getElementById('status').textContent = 'Error fetching conditions.';
-            }
-        }
+                document.getElementById('temperature').textContent = conditions.temperature + ' °C';
+                document.getElementById('humidity').textContent = conditions.humidity + ' %';
+                document.getElementById('lighting').textContent = conditions.lighting + ' lux';
+            } catch (error) {
+                console.error('Error fetching conditions:', error);
+                document.getElementById('status').textContent = 'Error fetching conditions.';
+            }
+        }
 
-        // Updaste the conditions every 5s
-        setInterval(fetchConditions, 5000);
+        // Updaste the conditions every 5s
+        setInterval(fetchConditions, 5000);
 
          // Function to convert minutes into hours and minutes (e.g., "1 hour 30 minutes")
         function convertMinutesToHoursAndMinutes(minutes) {
@@ -229,7 +181,7 @@
         }
 
         let setControlParameters;
-
+        //toggles control parameters
         document.getElementById('mosquitoModeBtn').addEventListener('click', async function() {
             // Show a confirmation popup when trying to enable mosquito mode
             if (!setControlParameters) {
@@ -302,10 +254,6 @@
                     alert("Mosquito Mode deactivation was cancelled");
                 }
             }
-
-
-
-
         });
 
         async function fetchControlParameters() {
@@ -321,29 +269,6 @@
                     setControlParameters = false; 
                     document.body.classList.remove('mosquito-mode');
                 }
-
-                // try {
-                //         // Send the updated mosquito mode to the backend
-                //         const response = await fetch('/setMosquitoMode', {
-                //             method: 'POST',
-                //             headers: {
-                //                 'Content-Type': 'application/x-www-form-urlencoded',
-                //             },
-                //             body: new URLSearchParams({
-                //                 MosquitoMode: setControlParameters
-                //             })
-                //         });
-
-                //         // Handle the backend response
-                //         const result = await response.json();
-                //         //alert(`Mosquito mode set: ${result.message}`);
-                       
-                //         // document.body.classList.remove('mosquito-mode');
-                //         // console.log('mosquito mode:', setControlParameters);
-                        
-                //     } catch (error) {
-                //         alert(`Error setting Mosquito Mode: ${error.message}`);
-                //     }
                 
                 // Populate the "control Parameters" section with the control settings
                 document.getElementById('controlTemperature').textContent = data.temperature || 'Not Set';
@@ -409,71 +334,68 @@
         }
 
 
-        async function setParameters() {
-            const temperature = document.getElementById('setTemperature').value;
-            const humidity = document.getElementById('setHumidity').value;
-            //const lighting = document.getElementById('setLighting').value;
-            const maxLighting = document.getElementById('setMaxLighting').value;
-            const dayLengthHours = parseInt(document.getElementById('setDayLengthHours').value, 10);
-            const dayLengthMinutes = parseInt(document.getElementById('setDayLengthMinutes').value, 10);
-            const samplingDurationHours = parseInt(document.getElementById('setSamplingDurationHours').value, 10);
-            const samplingDurationMinutes = parseInt(document.getElementById('setSamplingDurationMinutes').value, 10);
+        async function setParameters() {
+            const temperature = document.getElementById('setTemperature').value;
+            const humidity = document.getElementById('setHumidity').value;
+            //const lighting = document.getElementById('setLighting').value;
+            const maxLighting = document.getElementById('setMaxLighting').value;
+            const dayLengthHours = parseInt(document.getElementById('setDayLengthHours').value, 10);
+            const dayLengthMinutes = parseInt(document.getElementById('setDayLengthMinutes').value, 10);
+            const samplingDurationHours = parseInt(document.getElementById('setSamplingDurationHours').value, 10);
+            const samplingDurationMinutes = parseInt(document.getElementById('setSamplingDurationMinutes').value, 10);
             const lightingMode = document.getElementById('lightingMode').value; 
             const minuteCountHours = parseInt(document.getElementById('setMinuteCountHours').value,10);
             const minuteCountMinutes = parseInt(document.getElementById('setMinuteCountMinutes').value,10);
             const timeOn = document.getElementById('timeOn').value;
             const timeOff = document.getElementById('timeOff').value;
-            //validate the input for humidity
-            if(humidity < 0 || humidity > 100){
-                alert('Please enter valid humidity between 0% and 100%');
-                return;
-            }
+            //validate the input for humidity
+            if(humidity < 0 || humidity > 100){
+                alert('Please enter valid humidity between 0% and 100%');
+                return;
+            }
 
-            // Validate the input for hours and minutes
-            if (dayLengthHours < 0 || dayLengthHours > 24 || dayLengthMinutes < 0 || dayLengthMinutes > 59) {
-                alert('Please enter valid hours (0-24) and minutes (0-59) for Day Length.');
-                return;
-            }
+            // Validate the input for hours and minutes
+            if (dayLengthHours < 0 || dayLengthHours > 24 || dayLengthMinutes < 0 || dayLengthMinutes > 59) {
+                alert('Please enter valid hours (0-24) and minutes (0-59) for Day Length.');
+                return;
+            }
 
-            //Allows for no entry to not change the set value whilst preventing an undefined value if one of them is empty
-            let totalDayLength = null;
-            if (!dayLengthHours && !dayLengthMinutes) {
-                totalDayLength = "";
-            }else{
-                const hours = parseInt(dayLengthHours) || 0;  // Default to 0 if empty
-                const minutes = parseInt(dayLengthMinutes) || 0; // Default to 0 if empty
-                totalDayLength = (hours * 60) + minutes;
-            }
+            //Allows for no entry to not change the set value whilst preventing an undefined value if one of them is empty
+            let totalDayLength = null;
+            if (!dayLengthHours && !dayLengthMinutes) {
+                totalDayLength = "";
+            }else{
+                const hours = parseInt(dayLengthHours) || 0;  // Default to 0 if empty
+                const minutes = parseInt(dayLengthMinutes) || 0; // Default to 0 if empty
+                totalDayLength = (hours * 60) + minutes;
+            }
 
-            // Convert hours and minutes to total hours in decimal format
-           // const totalDayLength = (dayLengthHours*60) + dayLengthMinutes;
+            // Ensure total day length is within 0 and 24 hours
+            if (totalDayLength > 1440) {
+                alert('Length of day cannot exceed 24 hours.');
+                return;
+            }
 
-            // Ensure total day length is within 0 and 24 hours
-            if (totalDayLength > 1440) {
-                alert('Length of day cannot exceed 24 hours.');
-                return;
-            }
+            if (samplingDurationHours < 0 || samplingDurationMinutes < 0 || samplingDurationMinutes > 59) {
+                alert('Please enter a valid sampling duration.');
+                return;
+            }
 
-            if (samplingDurationHours < 0 || samplingDurationMinutes < 0 || samplingDurationMinutes > 59) {
-                alert('Please enter a valid sampling duration.');
-                return;
-            }
-
-             //Allows for no entry to not change the set value whilst preventing an undefined value if one of them is empty
-             let totalSamplingDuration= null;
-            if (!samplingDurationHours && !samplingDurationMinutes) {
-                totalSamplingDuration = "";
-            }else{
-                const hours = parseInt(samplingDurationHours) || 0;  // Default to 0 if empty
-                const minutes = parseInt(samplingDurationMinutes) || 0; // Default to 0 if empty
-                totalSamplingDuration = (hours * 60) + minutes;
-            }
+             //Allows for no entry to not change the set value whilst preventing an undefined value if one of them is empty
+             let totalSamplingDuration= null;
+            if (!samplingDurationHours && !samplingDurationMinutes) {
+                totalSamplingDuration = "";
+            }else{
+                const hours = parseInt(samplingDurationHours) || 0;  // Default to 0 if empty
+                const minutes = parseInt(samplingDurationMinutes) || 0; // Default to 0 if empty
+                totalSamplingDuration = (hours * 60) + minutes;
+            }
 
             // Validate the input for hours and minutes
             if (minuteCountHours < 0 || minuteCountHours > 24 || minuteCountMinutes < 0 || minuteCountMinutes > 59) {
-                alert('Please enter valid hours (0-24) and minutes (0-59) for Time in Cycle');
-                return;
-            }
+                alert('Please enter valid hours (0-24) and minutes (0-59) for Time in Cycle');
+                return;
+            }
 
             let totalMinuteCount=null;
             if(!minuteCountHours && !minuteCountMinutes){
@@ -489,211 +411,46 @@
                 return;
             }
 
-            //const totalSamplingDuration = (samplingDurationHours * 60) + samplingDurationMinutes;
 
-            try {
-                const response = await fetch('/setParameters', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        temperature: temperature,
-                        humidity: humidity,
-                        //lighting: lighting,
-                        maxLighting: maxLighting,
-                        dayLength: totalDayLength,
-                        samplingDuration: totalSamplingDuration,
+            try {
+                const response = await fetch('/setParameters', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        temperature: temperature,
+                        humidity: humidity,
+                        //lighting: lighting,
+                        maxLighting: maxLighting,
+                        dayLength: totalDayLength,
+                        samplingDuration: totalSamplingDuration,
                         lightingMode:lightingMode,
                         minuteCount: totalMinuteCount,
                         timeOn: timeOn,
                         timeOff: timeOff,
 
-                    }),
-                });
+                    }),
+                });
 
-                if (response.ok) {
-                    alert('Parameters set successfully');
+                if (response.ok) {
+                    alert('Parameters set successfully');
                     fetchCurrentParameters();
                     fetchControlParameters();
-                } else {
-                    alert(`Failed to set parameters: ${await response.text()}`);
-                }
-            } catch (error) {
-                console.error('Error setting parameters:', error);
-                alert('Network error. Check console for details.');
-            }
-        }
-
-        // async function setSamplingDuration() {
-        //     const hours = parseInt(document.getElementById('samplingHours').value);
-        //     const minutes = parseInt(document.getElementById('samplingMinutes').value);
-
-        //     const totalMinutes = (hours * 60) + minutes;
-
-        //     if (totalMinutes <= 0) {
-        //         document.getElementById('status').textContent = 'Please enter a valid duration.';
-        //         return;
-        //     }
-
-        //     try {
-        //         const response = await fetch('/setParameters', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({ duration: totalMinutes })
-        //         });
-
-        //         if (response.ok) {
-        //             document.getElementById('status').textContent = 'Duration saved successfully!';
-        //         } else {
-        //             document.getElementById('status').textContent = 'Error saving duration.';
-        //         }
-        //     } catch (error) {
-        //         console.error('Error saving duration:', error);
-        //         document.getElementById('status').textContent = 'Error saving duration.';
-        //     }
-        // }
-
-        // async function plotData() {
-        //     const response = await fetch('/data');
-        //     const data = await response.json();
-
-        //     const labels = data.map(row => row.Time);
-        //     const temperature = data.map(row => row.Temperature);
-        //     const humidity = data.map(row => row.Humidity);
-        //     const lighting = data.map(row => row.Lighting);
-
-        //     console.log('Temperature Data:', temperature);
-        //     console.log('Humidity Data:', humidity);
-
-        //     const ctx = document.getElementById('chart').getContext('2d');
-        //     const chart = new Chart(ctx, {
-        //         type: 'line',
-        //         data: {
-        //             labels: labels, // Your time or X-axis labels
-        //             datasets: [
-        //                 {
-        //                     label: 'Temperature',
-        //                     data: temperature, // Your temperature data
-        //                     borderColor: 'red',
-        //                     backgroundColor: 'red', 
-        //                     yAxisID: 'y-axis-temp',
-        //                     fill: false
-        //                 },
-        //                 {
-        //                     label: 'Humidity',
-        //                     data: humidity, // Your humidity data
-        //                     borderColor: 'blue',
-        //                     backgroundColor: 'blue',
-        //                     yAxisID: 'y-axis-humid',
-        //                     fill: false
-        //                 },
-        //                 {
-        //                     label: 'Lighting',
-        //                     data: lighting, // Your lighting data
-        //                     borderColor: 'orange',
-        //                     backgroundColor: 'orange',
-        //                     yAxisID: 'y-axis-light',
-        //                     fill: false
-        //                 }
-        //             ]
-        //         },
-        //         options: {
-        //             responsive: true,
-        //             scales: {
-        //                 x: {
-        //                     title: {
-        //                         display: true,
-        //                         text: 'Time'
-        //                     }
-        //                 },
-        //                 'y-axis-temp': {
-        //                     type: 'linear',
-        //                     position: 'left',
-        //                     title: {
-        //                         display: true,
-        //                         text: 'Temperature (°C)',
-        //                         color: 'rgba(255, 99, 132, 1)'
-        //                     },
-        //                     ticks: {
-        //                         color: 'rgba(255, 99, 132, 1)',
-        //                         beginAtZero: false,
-        //                         min: Math.min(...temperature) - 5, //Sets the correct scale for the data
-        //                         max: Math.max(...temperature) + 5
-        //                     },
-        //                     grid: {
-        //                         color: 'rgba(255, 99, 132, 1)'
-        //                     }
-        //                 },
-        //                 'y-axis-humid': {
-        //                     type: 'linear',
-        //                     position: 'right',
-        //                     title: {
-        //                         display: true,
-        //                         text: 'Humidity (%)',
-        //                         color: 'rgba(54, 162, 235, 1)'
-        //                     },
-        //                     ticks: {
-        //                         color: 'rgba(54, 162, 235, 1)',
-        //                         beginAtZero: false,
-        //                         min: Math.min(...temperature) - 5, //Sets the correct scale for the data
-        //                         max: Math.max(...temperature) + 5,
-        //                     },
-        //                     grid: {
-        //                         color: 'rgba(54, 162, 235, 0.5)',
-        //                         //drawOnChartArea: false // Prevent grid lines from overlapping
-        //                     }
-        //                 },
-        //                 'y-axis-light': {
-        //                     type: 'linear',
-        //                     position: 'right',
-        //                     title: {
-        //                         display: true,
-        //                         text: 'Lighting (LUX)',
-        //                         color: 'rgba(255, 165, 0, 1)'
-        //                     },
-        //                     ticks: {
-        //                         color: 'rgba(255, 165, 0, 1)',
-        //                         beginAtZero: false,
-        //                         min: Math.min(...humidity) - 5, //Sets the correct Scale
-        //                         max: Math.max(...humidity) + 5
-        //                     },
-        //                     grid: {
-        //                         color: 'rgba(255, 165, 0, 0.5)',
-        //                         //drawOnChartArea: false // Prevent grid lines from overlapping
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     });
-        // }
+                } else {
+                    alert(`Failed to set parameters: ${await response.text()}`);
+                }
+            } catch (error) {
+                console.error('Error setting parameters:', error);
+                alert('Network error. Check console for details.');
+            }
+        }
 
 
-    function parseCsvTime(timeString) {
-        return new Date(timeString);
-    }
+    function parseCsvTime(timeString) {
+        return new Date(timeString);
+    }
 
-
-//     async function fetchFilteredData(startDate, endDate) {
-//         const queryParams = new URLSearchParams({
-//             start: startDate,
-//             end: endDate || ''
-//         });
-
-//         try {
-//             const response = await fetch(`/data?${queryParams}`);
-//             const data = await response.json();
-//             // Log data for debugging
-//             console.log('Fetched data:', data);
-
-//             return data;
-//         } catch (error) {
-//             console.error('Error fetching data:', error);
-//             return [];
-//         }
-//     }
 
         async function fetchFilteredData(startDate, endDate) {
             // Check if startDate is after endDate
@@ -722,121 +479,102 @@
         }
 
 
-    let isCombined = true;//Setting global variable for showing combined or seperate charts
+    let isCombined = true;//Setting global variable for showing combined or seperate charts
 
 
-    // Function to toggle between combined and separate graphs
-    function togglePlotMode() {
-        isCombined = !isCombined;
-        const toggleButton = document.getElementById("toggleButton");
-        const combinedChartContainer = document.getElementById("combinedChartContainer");
-        const separateGraphsContainer = document.getElementById("separateGraphsContainer");
+    // Function to toggle between combined and separate graphs
+    function togglePlotMode() {
+        isCombined = !isCombined;
+        const toggleButton = document.getElementById("toggleButton");
+        const combinedChartContainer = document.getElementById("combinedChartContainer");
+        const separateGraphsContainer = document.getElementById("separateGraphsContainer");
 
-        if (isCombined) {
-            toggleButton.textContent = "Switch to Separate Graphs";
-            combinedChartContainer.style.display = "block";
-            separateGraphsContainer.style.display = "none";
-            plotCombinedData();  // Call function to plot combined graph
-        } else {
-            toggleButton.textContent = "Switch to Combined Graph";
-            combinedChartContainer.style.display = "none";
-            separateGraphsContainer.style.display = "block";
-            plotSeparateData();  // Call function to plot separate graphs
-        }
-    }
+        if (isCombined) {
+            toggleButton.textContent = "Switch to Separate Graphs";
+            combinedChartContainer.style.display = "block";
+            separateGraphsContainer.style.display = "none";
+            plotCombinedData();  // Call function to plot combined graph
+        } else {
+            toggleButton.textContent = "Switch to Combined Graph";
+            combinedChartContainer.style.display = "none";
+            separateGraphsContainer.style.display = "block";
+            plotSeparateData();  // Call function to plot separate graphs
+        }
+    }
 
-    let combinedChart = null;
-    let plotBasedOnTimeRange = false;
-    let UpdateGraph = true;
+    let combinedChart = null;
+    let plotBasedOnTimeRange = false;
+    let UpdateGraph = true;
 
-    //set to false to plot without time range again.
-//     async function plotGraphWithoutTimeRange() {
-//         plotBasedOnTimeRange = false;
-//         UpdateGraph = true;
-//     }
+    //set to false to plot without time range again.
+//     async function plotGraphWithoutTimeRange() {
+//         plotBasedOnTimeRange = false;
+//         UpdateGraph = true;
+//     }
 
-    async function plotGraphBasedOnTimeRange() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
+    async function plotGraphBasedOnTimeRange() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
 
-        if (!startDate) {
-            alert('Please provide a start date and time.');
-            return;
-        }
+        if (!startDate) {
+            alert('Please provide a start date and time.');
+            return;
+        }
 
-        if (!endDate){
-            UpdateGraph = true;
-        } else {
-            UpdateGraph = false;
-        }
+        if (!endDate){
+            UpdateGraph = true;
+        } else {
+            UpdateGraph = false;
+        }
 
-        plotBasedOnTimeRange = true;
-        
-        // Pass start and end dates to the plotting functions
-        // await plotCombinedData(startDate, endDate);
-        // await plotSeparateData(startDate, endDate);
-        plotCombinedData();
-        plotSeparateData();
-    }
+        plotBasedOnTimeRange = true;
+        
+        // Pass start and end dates to the plotting functions
+        // await plotCombinedData(startDate, endDate);
+        // await plotSeparateData(startDate, endDate);
+        plotCombinedData();
+        plotSeparateData();
+    }
 
-    async function plotGraphWithoutTimeRange() {
-        plotBasedOnTimeRange = false;
+    async function plotGraphWithoutTimeRange() {
+        plotBasedOnTimeRange = false;
         UpdateGraph = true;
 
-        // Reset to plot the entire dataset without filtering by date
-        await plotCombinedData();
-        await plotSeparateData();
-    }
+        // Reset to plot the entire dataset without filtering by date
+        await plotCombinedData();
+        await plotSeparateData();
+    }
 
-    // Function to check if dark mode is enabled
-    function isDarkMode() {
-        return document.body.classList.contains('dark-mode'); // Adjust this based on your dark mode implementation
-    }
+    // Fetch and plot combined data
+   async function plotCombinedData(){
+        let data;
 
-    // Function to update chart gridlines
-    function updateChartGridlines(chart) {
-        if (isDarkMode()) {
-            // Lighter gridlines for dark mode
-            chart.config.options.scales.x.grid.color = '#cccccc'; // Lighter gray
-            chart.config.options.scales.y.grid.color = '#cccccc'; // Lighter gray
-        } else {
-            // Darker gridlines for light mode
-            chart.config.options.scales.x.grid.color = '#666666'; // Darker gray
-            chart.config.options.scales.y.grid.color = '#666666'; // Darker gray
-        }
-        chart.update();
-    }
+        
+        if (plotBasedOnTimeRange) {
+            // Fetch startDate and endDate from the input fields
+            const startDateElem = document.getElementById('startDate');
+            const endDateElem = document.getElementById('endDate');
 
-    // Fetch and plot combined data
-   async function plotCombinedData(){
-        let data;
+            // Check if the startDate and endDate elements exist
+            if (!startDateElem) {
+                console.error('Start date input field not found');
+                return;
+            }
+            
+            const startDate = startDateElem.value;
+            const endDate = endDateElem ? endDateElem.value : ''; // Handle optional endDate
 
-        
-        if (plotBasedOnTimeRange) {
-            // Fetch startDate and endDate from the input fields
-            const startDateElem = document.getElementById('startDate');
-            const endDateElem = document.getElementById('endDate');
+            // Ensure startDate is provided
+            if (!startDate) {
+                console.error('Start date is required.');
+                document.getElementById('status').textContent = 'Please provide a start date.';
+                return;
+            }
 
-            // Check if the startDate and endDate elements exist
-            if (!startDateElem) {
-                console.error('Start date input field not found');
-                return;
-            }
-            
-            const startDate = startDateElem.value;
-            const endDate = endDateElem ? endDateElem.value : ''; // Handle optional endDate
-
-            // Ensure startDate is provided
-            if (!startDate) {
-                console.error('Start date is required.');
-                document.getElementById('status').textContent = 'Please provide a start date.';
-                return;
-            }
-
-            data = await fetchFilteredData(startDate, endDate);
-        } else {
-            // Fetch the full dataset if no time range is provided
-           try {
+            data = await fetchFilteredData(startDate, endDate);
+        } else {
+            // Fetch the full dataset if no time range is provided
+           try {
                 const response = await fetch('/data');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -848,26 +586,26 @@
                 console.error('Error fetching full dataset:', error);
                 document.getElementById('status').textContent = 'Error fetching full dataset.';
             }
-        }
+        }
 
-        // if (plotBasedOnTimeRange){
-        //     const data = await fetchFilteredData(startDate, endDate);
-        // } else{
-        //     const response = await fetch('/data');
-        //     const data = await response.json();
-        // }
+        // if (plotBasedOnTimeRange){
+        //     const data = await fetchFilteredData(startDate, endDate);
+        // } else{
+        //     const response = await fetch('/data');
+        //     const data = await response.json();
+        // }
 
-        // // Ensure data is in the expected format
-        // if (!Array.isArray(data)) {
-        //     console.error('Unexpected data format:', data);
-        //     return;
-        // }
+        // // Ensure data is in the expected format
+        // if (!Array.isArray(data)) {
+        //     console.error('Unexpected data format:', data);
+        //     return;
+        // }
 
-          // Handle empty or undefined data
-        if (!data || data.length === 0) {
-            console.error('No data to plot');
-            return;
-        }
+          // Handle empty or undefined data
+        if (!data || data.length === 0) {
+            console.error('No data to plot');
+            return;
+        }
 
          // Check if the fetched data is an array
         console.log('Fetched data:', data); // Check the structure here
@@ -878,353 +616,353 @@
         }
 
 
-        const labels = data.map(row => row.Time);
-        const temperature = data.map(row => row.Temperature);
-        const humidity = data.map(row => row.Humidity);
-        const lighting = data.map(row => row.Lighting);
+        const labels = data.map(row => row.Time);
+        const temperature = data.map(row => row.Temperature);
+        const humidity = data.map(row => row.Humidity);
+        const lighting = data.map(row => row.Lighting);
 
-        if(combinedChart){
-            combinedChart.destroy();
-        }
+        if(combinedChart){
+            combinedChart.destroy();
+        }
 
-        const ctx = document.getElementById('chart').getContext('2d');
-            combinedChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels, // Your time or X-axis labels
-                    datasets: [
-                        {
-                            label: 'Temperature',
-                            data: temperature, // Your temperature data
-                            borderColor: 'red',
-                            backgroundColor: 'red', 
-                            yAxisID: 'y-axis-temp',
-                            fill: false
-                        },
-                        {
-                            label: 'Humidity',
-                            data: humidity, // Your humidity data
-                            borderColor: 'blue',
-                            backgroundColor: 'blue',
-                            yAxisID: 'y-axis-humid',
-                            fill: false
-                        },
-                        {
-                            label: 'Lighting',
-                            data: lighting, // Your lighting data
-                            borderColor: 'orange',
-                            backgroundColor: 'orange',
-                            yAxisID: 'y-axis-light',
-                            fill: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Time',
-                                color: isDarkMode() ? '#000000' : '#666666' //Initial gridline colour
-                            },
-                            grid: {
-                                color: isDarkMode() ? '#333333' : '#666666' //Initial gridline colour
-                            },
-                            ticks:{
-                                color: isDarkMode() ? '#444444' : '#666666' //Initial gridline colour
-                            },
-                        },
-                        'y-axis-temp': {
-                            type: 'linear',
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'Temperature (°C)',
-                                color: 'rgba(255, 99, 132, 1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 99, 132, 1)',
-                                beginAtZero: false,
-                                min: Math.min(...temperature) - 5, //Sets the correct scale for the data
-                                max: Math.max(...temperature) + 5
-                            },
-                            grid: {
-                                color: 'rgba(255, 99, 132, 1)'
-                            }
-                        },
-                        'y-axis-humid': {
-                            type: 'linear',
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: 'Humidity (%)',
-                                color: 'rgba(54, 162, 235, 1)'
-                            },
-                            ticks: {
-                                color: 'rgba(54, 162, 235, 1)',
-                                beginAtZero: false,
-                                min: Math.min(...temperature) - 5, //Sets the correct scale for the data
-                                max: Math.max(...temperature) + 5,
-                            },
-                            grid: {
-                                color: 'rgba(54, 162, 235, 0.5)',
-                                //drawOnChartArea: false // Prevent grid lines from overlapping
-                            }
-                        },
-                        'y-axis-light': {
-                            type: 'linear',
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: 'Lighting (lux)',
-                                color: 'rgba(255, 165, 0, 1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 165, 0, 1)',
-                                beginAtZero: false,
-                                min: Math.min(...humidity) - 5, //Sets the correct Scale
-                                max: Math.max(...humidity) + 5
-                            },
-                            grid: {
-                                color: 'rgba(255, 165, 0, 0.5)',
-                                //drawOnChartArea: false // Prevent grid lines from overlapping
-                            }
-                        }
-                    }
-                }
-            });
-            options: { responsive: true }
-    }
+        const ctx = document.getElementById('chart').getContext('2d');
+            combinedChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels, // Your time or X-axis labels
+                    datasets: [
+                        {
+                            label: 'Temperature',
+                            data: temperature, 
+                            borderColor: 'red',
+                            backgroundColor: 'red', 
+                            yAxisID: 'y-axis-temp',
+                            fill: false
+                        },
+                        {
+                            label: 'Humidity',
+                            data: humidity,
+                            borderColor: 'blue',
+                            backgroundColor: 'blue',
+                            yAxisID: 'y-axis-humid',
+                            fill: false
+                        },
+                        {
+                            label: 'Lighting',
+                            data: lighting, 
+                            borderColor: 'orange',
+                            backgroundColor: 'orange',
+                            yAxisID: 'y-axis-light',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time',
+                                color: '#666666'  
+                            },
+                            grid: {
+                                color: '#666666'  
+                            },
+                            ticks:{
+                                color: '#666666'  
+                            },
+                        },
+                        'y-axis-temp': {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Temperature (°C)',
+                                color: 'rgba(255, 99, 132, 1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 99, 132, 1)',
+                                beginAtZero: false,
+                                min: Math.min(...temperature) - 5, //Sets the correct scale for the data
+                                max: Math.max(...temperature) + 5
+                            },
+                            grid: {
+                                color: 'rgba(255, 99, 132, 1)'
+                            }
+                        },
+                        'y-axis-humid': {
+                            type: 'linear',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Humidity (%)',
+                                color: 'rgba(54, 162, 235, 1)'
+                            },
+                            ticks: {
+                                color: 'rgba(54, 162, 235, 1)',
+                                beginAtZero: false,
+                                min: Math.min(...temperature) - 5, //Sets the correct scale for the data
+                                max: Math.max(...temperature) + 5,
+                            },
+                            grid: {
+                                color: 'rgba(54, 162, 235, 0.5)',
+                                //drawOnChartArea: false // Prevent grid lines from overlapping
+                            }
+                        },
+                        'y-axis-light': {
+                            type: 'linear',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Lighting (lux)',
+                                color: 'rgba(255, 165, 0, 1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 165, 0, 1)',
+                                beginAtZero: false,
+                                min: Math.min(...humidity) - 5, //Sets the correct Scale
+                                max: Math.max(...humidity) + 5
+                            },
+                            grid: {
+                                color: 'rgba(255, 165, 0, 0.5)',
+                                //drawOnChartArea: false // Prevent grid lines from overlapping
+                            }
+                        }
+                    }
+                }
+            });
+            options: { responsive: true }
+    }
 
-    //Set global chart variables to null as they are yet to be created.
-    let temperatureChart = null;
-    let humidityChart = null;
-    let lightingChart = null;
+    //Set global chart variables to null as they are yet to be created.
+    let temperatureChart = null;
+    let humidityChart = null;
+    let lightingChart = null;
 
-    // Fetch and plot separate graphs for temperature, humidity, and lighting
-    async function plotSeparateData(){
-        let data;
+    // Fetch and plot separate graphs for temperature, humidity, and lighting
+    async function plotSeparateData(){
+        let data;
 
-        
-        if (plotBasedOnTimeRange) {
-            // Fetch startDate and endDate from the input fields
-            const startDateElem = document.getElementById('startDate');
-            const endDateElem = document.getElementById('endDate');
+        
+        if (plotBasedOnTimeRange) {
+            // Fetch startDate and endDate from the input fields
+            const startDateElem = document.getElementById('startDate');
+            const endDateElem = document.getElementById('endDate');
 
-            // Check if the startDate and endDate elements exist
-            if (!startDateElem) {
-                alert('Start date input field not found');
-                return;
-            }
-            
-            const startDate = startDateElem.value;
-            const endDate = endDateElem ? endDateElem.value : ''; // Handle optional endDate
+            // Check if the startDate and endDate elements exist
+            if (!startDateElem) {
+                alert('Start date input field not found');
+                return;
+            }
+            
+            const startDate = startDateElem.value;
+            const endDate = endDateElem ? endDateElem.value : ''; // Handle optional endDate
 
-            // Ensure startDate is provided
-            if (!startDate) {
-                console.error('Start date is required.');
-                document.getElementById('status').textContent = 'Please provide a start date.';
-                return;
-            }
+            // Ensure startDate is provided
+            if (!startDate) {
+                console.error('Start date is required.');
+                document.getElementById('status').textContent = 'Please provide a start date.';
+                return;
+            }
 
-            data = await fetchFilteredData(startDate, endDate);
-        } else {
-            // Fetch the full dataset if no time range is provided
-            try {
-                const response = await fetch('/data');
-                data = await response.json();
-            } catch (error) {
-                console.error('Error fetching full dataset:', error);
-                document.getElementById('status').textContent = 'Error fetching full dataset.';
-                return;
-            }
-        }
+            data = await fetchFilteredData(startDate, endDate);
+        } else {
+            // Fetch the full dataset if no time range is provided
+            try {
+                const response = await fetch('/data');
+                data = await response.json();
+            } catch (error) {
+                console.error('Error fetching full dataset:', error);
+                document.getElementById('status').textContent = 'Error fetching full dataset.';
+                return;
+            }
+        }
 
-    // Handle empty or undefined data
-    if (!data || data.length === 0) {
-        console.error('No data to plot');
-        return;
-    }   
+    // Handle empty or undefined data
+    if (!data || data.length === 0) {
+        console.error('No data to plot');
+        return;
+    }   
 
 
-        const labels = data.map(row => row.Time);
-        const temperature = data.map(row => row.Temperature);
-        const humidity = data.map(row => row.Humidity);
-        const lighting = data.map(row => row.Lighting);
+        const labels = data.map(row => row.Time);
+        const temperature = data.map(row => row.Temperature);
+        const humidity = data.map(row => row.Humidity);
+        const lighting = data.map(row => row.Lighting);
 
-        // Destroy existing charts if they exist
-        if (temperatureChart) temperatureChart.destroy();
-        if (humidityChart) humidityChart.destroy();
-        if (lightingChart) lightingChart.destroy();
-        // Plot temperature graph
-        const tempCtx = document.getElementById('tempChart').getContext('2d');
-        temperatureChart = new Chart(tempCtx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Temperature',
-                    data: temperature,
-                    borderColor: 'red',
-                    backgroundColor: 'red',
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x:{
-                        grid: {
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        title: {
-                            display: true,
-                            text: 'Time',
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        ticks:{
-                            color: isDarkMode() ? '#555555' : '#666666' //Initial gridline colour
-                        },
-                    },
-                    y: {
-                        grid: {
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        title: {
-                            display: true,
-                            text: 'Temperature (°C)',
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        ticks:{
-                            color: isDarkMode() ? '#555555' : '#666666' //Initial gridline colour
-                        },
-                    }
-                }
-            }
-        });
+        // Destroy existing charts if they exist
+        if (temperatureChart) temperatureChart.destroy();
+        if (humidityChart) humidityChart.destroy();
+        if (lightingChart) lightingChart.destroy();
+        // Plot temperature graph
+        const tempCtx = document.getElementById('tempChart').getContext('2d');
+        temperatureChart = new Chart(tempCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Temperature',
+                    data: temperature,
+                    borderColor: 'red',
+                    backgroundColor: 'red',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x:{
+                        grid: {
+                            color:'#666666'  
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            color:'#666666'  
+                        },
+                        ticks:{
+                            color:'#666666'  
+                        },
+                    },
+                    y: {
+                        grid: {
+                            color:'#666666'  
+                        },
+                        title: {
+                            display: true,
+                            text: 'Temperature (°C)',
+                            color:'#666666'  
+                        },
+                        ticks:{
+                            color: '#666666' 
+                        },
+                    }
+                }
+            }
+        });
 
-        // Plot humidity graph
-        const humidCtx = document.getElementById('humidChart').getContext('2d');
-        humidityChart = new Chart(humidCtx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Humidity',
-                    data: humidity,
-                    borderColor: 'blue',
-                    backgroundColor: 'blue',
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x:{
-                        grid: {
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        title: {
-                            display: true,
-                            text: 'Time',
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        ticks:{
-                            color: isDarkMode() ? '#555555' : '#666666' //Initial gridline colour
-                        },
-                    },
-                    y: {
-                        grid: {
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        title: {
-                            display: true,
-                            text: 'Humidity (%)',
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        ticks:{
-                            color: isDarkMode() ? '#555555' : '#666666' //Initial gridline colour
-                        },
-                    }
-                }
-            }
-        });
+        // Plot humidity graph
+        const humidCtx = document.getElementById('humidChart').getContext('2d');
+        humidityChart = new Chart(humidCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Humidity',
+                    data: humidity,
+                    borderColor: 'blue',
+                    backgroundColor: 'blue',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x:{
+                        grid: {
+                            color:'#666666'  
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            color:'#666666'  
+                        },
+                        ticks:{
+                            color:'#666666'  
+                        },
+                    },
+                    y: {
+                        grid: {
+                            color:'#666666'  
+                        },
+                        title: {
+                            display: true,
+                            text: 'Humidity (%)',
+                            color:'#666666'  
+                        },
+                        ticks:{
+                            color:'#666666'  
+                        },
+                    }
+                }
+            }
+        });
 
-        // Plot lighting graph
-        const lightCtx = document.getElementById('lightChart').getContext('2d');
-        lightingChart = new Chart(lightCtx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Lighting',
-                    data: lighting,
-                    borderColor: 'orange',
-                    backgroundColor: 'orange',
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x:{
-                        grid: {
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        }, 
-                        title: {
-                            display: true,
-                            text: 'Time',
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        ticks:{
-                            color: isDarkMode() ? '#555555' : '#666666' //Initial gridline colour
-                        },
-                    },
-                    y: {
-                        grid: {
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        title: {
-                            display: true,
-                            text: 'Lighting (lux)',
-                            color: isDarkMode() ? '#444' : '#666666' //Initial gridline colour
-                        },
-                        ticks:{
-                            color: isDarkMode() ? '#555555' : '#666666' //Initial gridline colour
-                        },
-                    }
-                }
-            }
-        });
-    }
+        // Plot lighting graph
+        const lightCtx = document.getElementById('lightChart').getContext('2d');
+        lightingChart = new Chart(lightCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Lighting',
+                    data: lighting,
+                    borderColor: 'orange',
+                    backgroundColor: 'orange',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x:{
+                        grid: {
+                            color:'#666666'  
+                        }, 
+                        title: {
+                            display: true,
+                            text: 'Time',
+                            color: '#666666'  
+                        },
+                        ticks:{
+                            color: '#666666'  
+                        },
+                    },
+                    y: {
+                        grid: {
+                            color:'#666666'  
+                        },
+                        title: {
+                            display: true,
+                            text: 'Lighting (lux)',
+                            color:'#666666'  
+                        },
+                        ticks:{
+                            color:'#666666'  
+                        },
+                    }
+                }
+            }
+        });
+    }
 
-    function downloadChart(chart, filename) {
-        const canvas = chart.canvas; // Access the canvas element directly
-        canvas.toBlob(function(blob) {
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            URL.revokeObjectURL(link.href);
-            document.body.removeChild(link);
-        });
-    }
+    function downloadChart(chart, filename) {
+        const canvas = chart.canvas; // Access the canvas element directly
+        canvas.toBlob(function(blob) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            URL.revokeObjectURL(link.href);
+            document.body.removeChild(link);
+        });
+    }
 
-    //updates the graphs every 5s
-    setInterval(async() => {
-        if (UpdateGraph){
-            if(plotBasedOnTimeRange){
-                plotGraphBasedOnTimeRange();
-            } else{
-                await plotCombinedData();
-                await plotSeparateData();
-            }
-        } else{return;}
-        
-        
-    }, 30000);
+    //updates the graphs every 5s
+    setInterval(async() => {
+        if (UpdateGraph){
+            if(plotBasedOnTimeRange){
+                plotGraphBasedOnTimeRange();
+            } else{
+                await plotCombinedData();
+                await plotSeparateData();
+            }
+        } else{return;}
+        
+        
+    }, 30000);
 
     document.getElementById('download-full-csv').addEventListener('click', function () {
             window.location.href = '/download/full';
@@ -1306,101 +1044,50 @@
 
 
 
-    window.onload = async function() {
-        fetchConditions();
+    window.onload = async function() {
+        fetchConditions();
         fetchControlParameters();
         fetchCurrentParameters();
-        await plotCombinedData(); // Ensure combined data is plotted
-        await plotSeparateData(); // Ensure separate data is plotted
+        await plotCombinedData(); // Ensure combined data is plotted
+        await plotSeparateData(); // Ensure separate data is plotted
 
 
-        document.getElementById('plotbutton').addEventListener('click', plotGraphBasedOnTimeRange);
-        document.getElementById('plotWithoutTimeRange').addEventListener('click', plotGraphWithoutTimeRange);
+        document.getElementById('plotbutton').addEventListener('click', plotGraphBasedOnTimeRange);
+        document.getElementById('plotWithoutTimeRange').addEventListener('click', plotGraphWithoutTimeRange);
 
-        // Set up event listeners for download buttons after charts are initialized
-        document.getElementById('downloadTemperature').addEventListener('click', () => {
-            if (temperatureChart) {
-                downloadChart(temperatureChart, 'temperature-chart.png');
-            }
-        });
+        // Set up event listeners for download buttons after charts are initialized
+        document.getElementById('downloadTemperature').addEventListener('click', () => {
+            if (temperatureChart) {
+                downloadChart(temperatureChart, 'temperature-chart.png');
+            }
+        });
 
-        document.getElementById('downloadHumidity').addEventListener('click', () => {
-            if (humidityChart) {
-                downloadChart(humidityChart, 'humidity-chart.png');
-            }
-        });
+        document.getElementById('downloadHumidity').addEventListener('click', () => {
+            if (humidityChart) {
+                downloadChart(humidityChart, 'humidity-chart.png');
+            }
+        });
 
-        document.getElementById('downloadLighting').addEventListener('click', () => {
-            if (lightingChart) {
-                downloadChart(lightingChart, 'lighting-chart.png');
-            }
-        });
+        document.getElementById('downloadLighting').addEventListener('click', () => {
+            if (lightingChart) {
+                downloadChart(lightingChart, 'lighting-chart.png');
+            }
+        });
 
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            const canvasElement = document.getElementById('chart');
-            canvasElement.toBlob(function(blob) {
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'combined-graph.png';
-                document.body.appendChild(link);
-                link.click();
-                URL.revokeObjectURL(link.href);
-                document.body.removeChild(link);
-            });
-        });
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const canvasElement = document.getElementById('chart');
+            canvasElement.toBlob(function(blob) {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'combined-graph.png';
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(link.href);
+                document.body.removeChild(link);
+            });
+        });
 
-//         document.getElementById('toggle-dark-mode').addEventListener('click', function() {
-//             document.body.classList.toggle('dark-mode');
-//             updateChartGridlines(combinedChart);
-//             updateChartGridlines(temperatureChart);
-//             updateChartGridlines(humidityChart);
-//             updateChartGridlines(lightingChart);
-//         });
-    };
+    };
 
-
-    // document.getElementById('downloadTemperature').addEventListener('click', () => {
-    //     downloadChart(temperatureChart.canvas, 'temperature-chart.png');
-    // });
-        
-    // document.getElementById('downloadHumidity').addEventListener('click', () => {
-    //     downloadChart(humidityChart.canvas, 'humidity-chart.png');
-    // });
-
-    // document.getElementById('downloadLighting').addEventListener('click', () => {
-    //     downloadChart(lightingChart.canvas, 'lighting-chart.png');
-    // });
-
-    // document.getElementById('downloadBtn').addEventListener('click', function() {
-    //     // Target only the canvas element inside the chartContainer
-    //     const canvasElement = document.getElementById('chart');
-        
-    //     // Convert the canvas element to an image
-    //     canvasElement.toBlob(function(blob) {
-    //         // Create a link element
-    //         const link = document.createElement('a');
-    //         link.href = URL.createObjectURL(blob); // Create a URL for the blob
-    //         link.download = 'combined-graph.png'; // Set download file name
-
-    //         // Append the link to the body
-    //         document.body.appendChild(link);
-            
-    //         // Trigger the download by simulating a click
-    //         link.click();
-            
-    //         // Clean up the URL and remove the link
-    //         URL.revokeObjectURL(link.href);
-    //         document.body.removeChild(link);
-    //     });
-    // });
-
-    //     window.onload = async function() {
-    //         await fetchCurrentNetwork();
-    //         await fetchNetworks();
-    //         fetchConditions();
-    //         plotCombinedData();
-    //     };
-
-    //     plotCombinedData();
     </script>
 </body>
