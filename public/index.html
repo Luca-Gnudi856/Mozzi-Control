@@ -629,7 +629,7 @@
             combinedChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels, // Your time or X-axis labels
+                    labels: labels, 
                     datasets: [
                         {
                             label: 'Temperature',
@@ -950,7 +950,7 @@
         });
     }
 
-    //updates the graphs every 5s
+    //updates the graphs every number/1000s
     setInterval(async() => {
         if (UpdateGraph){
             if(plotBasedOnTimeRange){
