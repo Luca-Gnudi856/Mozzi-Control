@@ -18,17 +18,19 @@
         <a href="#"><img src="/android-chrome-512x512.png" alt="Logo" class="navbar-logo"></a>
         
         <!-- <a href="index.html" class="active">Home</a> -->
-    <div class="dropdown">
-        <button class="dropbtn">Home &#9660 </button>
-        <div class="dropdown-content">
-            <a href="#conditions">Current Conditions</a>
-            <a href="#controlParametersSection">Control Parameter Settings</a> 
-            <a href="#parameters">Set Parameters</a>
-            <a href="#data">Data Plot</a>
+    <div class="navbar-left">
+        <div class="dropdown">
+            <button class="dropbtn">Home &#9660 </button>
+            <div class="dropdown-content">
+                <a href="#conditions">Current Conditions</a>
+                <a href="#controlParametersSection">Control Parameter Settings</a> 
+                <a href="#parameters">Set Parameters</a>
+                <a href="#data">Data Plot</a>
+            </div>
         </div>
-    </div>
         <a href="/networks.html">Available Networks</a>
         <button id="mosquitoModeBtn">Mosquito Mode</button>
+    </div>
         <h1 class="navbar-title">Mosquito Environment Control</h1>
     </div>
 
@@ -129,14 +131,22 @@
             <br><br>
             <button id="toggleButton" onclick="togglePlotMode()">Switch to Separate Graphs</button>
             <div id="combinedChartContainer">
-                <canvas id="chart" width="800" height="400"></canvas>
+                <div class="chart-container">
+                <canvas id="chart" width="1920px" height="1080px"></canvas>
+                </div>
             </div>
             <div id="separateGraphsContainer" style="display: none;">
-                <canvas id="tempChart" width="800" height="400"></canvas>
+                <div class ="chart-container">
+                <canvas id="tempChart" ></canvas>
+                </div>
                 <button id="downloadTemperature">Download Temperature Graph</button>
-                <canvas id="humidChart" width="800" height="400"></canvas>
+                <div class="chart-container">
+                <canvas id="humidChart" ></canvas>
+                </div>
                 <button id="downloadHumidity">Download Humidity Graph</button>
-                <canvas id="lightChart" width="800" height="400"></canvas>
+                <div class="chart-container">
+                <canvas id="lightChart" ></canvas>
+                </div>
                 <button id="downloadLighting">Download Lighting Graph</button>
             </div>
             <br><br>
@@ -1285,6 +1295,13 @@
             console.error('Error fetching filtered data:', error);
             document.getElementById('status').textContent = 'Error fetching filtered data.';
         }
+    });
+
+    window.addEventListener('resize', function() {
+        combinedChart.resize();
+        temperatureChart.resize();
+        humidityChart.resize();
+        lightingChart.resize(); 
     });
 
 
